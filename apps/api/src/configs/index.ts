@@ -3,12 +3,12 @@ import { local } from "./environments/local";
 import type { ApplicationConfig } from "./types";
 
 const applicationEnvironment: {
-  local: ApplicationConfig;
+	local: ApplicationConfig;
 } = {
-  local: local,
+	local: local,
 };
 
 export const config = {
-  ...applicationEnvironment[env.NODE_ENV],
-  env,
+	...applicationEnvironment[env.NODE_ENV],
+	env,
 };
