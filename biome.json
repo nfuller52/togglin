@@ -6,7 +6,8 @@
 		"useIgnoreFile": false
 	},
 	"files": {
-		"ignoreUnknown": false
+		"ignoreUnknown": false,
+		"includes": ["**/*", "!apps/api/src/db/db.d.ts"]
 	},
 	"formatter": {
 		"enabled": true,
