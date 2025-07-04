@@ -1,0 +1,14 @@
+{
+ "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@shared/*": ["libs/shared/src/*"]
+    }
+  },
+  "files": [],
+  "references": [
+    { "path": "libs/shared" },
+    { "path": "apps/web" },
+    { "path": "apps/api" }
+  ]
+}
