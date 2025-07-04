@@ -1,0 +1,27 @@
+services:
+  db:
+    image: postgres:17-alpine
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: togglin
+      POSTGRES_PASSWORD: togglin
+      POSTGRES_DB: togglin-local
+      PGDATA: /var/lib/postgresql/data/pgdata
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 3s
+      timeout: 5s
+      retries: 5
+    networks:
+      - togglin_network
+    volumes:
+      - togglin_db_data:/var/lib/postgresql/data/pgdata
+
+volumes:
+  togglin_db_data:
+
+networks:
+  togglin_network:
+    driver: bridge
