@@ -1,9 +1,13 @@
 {
 	"name": "togglin",
 	"version": "0.1.0",
+	"author": "Nick Fuller",
 	"license": "MIT",
 	"scripts": {
-		"dev": "turbo run dev"
+		"clean": "turbo run clean",
+		"check-types": "turbo run check-types",
+		"dev": "turbo run dev",
+		"test": "turbo run test"
 	},
 	"workspaces": [
 		"apps/*",

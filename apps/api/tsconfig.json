@@ -1,13 +1,23 @@
 {
 	"extends": "../../tsconfig.json",
 	"compilerOptions": {
-		"target": "ES2020",
-		"module": "CommonJS",
+		"target": "ES2022",
+		"lib": ["ES2022"],
+		"module": "ESNext",
+		"moduleResolution": "node",
 		"outDir": "dist",
 		"strict": true,
 		"esModuleInterop": true,
 		"forceConsistentCasingInFileNames": true,
-		"skipLibCheck": true
+		"skipLibCheck": true,
+		"sourceMap": true,
+		"types": ["vitest/globals"],
+		"baseUrl": ".",
+		"paths": {
+			"@/*": ["src/*"],
+			"@module/*": ["src/modules/*"]
+		}
 	},
-	"include": ["src"]
+	"include": ["src/**/*.ts", "vite.setup.ts"],
+	"exclude": ["node_modules", ".turbo"]
 }
