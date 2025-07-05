@@ -4,19 +4,19 @@ import { ThemeProvider } from "@/contexts/theme-provider";
 import { routeTree } from "./routeTree.gen";
 
 declare module "@tanstack/react-router" {
-	interface Register {
-		router: typeof router;
-	}
+  interface Register {
+    router: typeof router;
+  }
 }
 
 const router = createRouter({ routeTree });
 
 export function App() {
-	return (
-		<ApiProvider>
-			<ThemeProvider>
-				<RouterProvider router={router} />
-			</ThemeProvider>
-		</ApiProvider>
-	);
+  return (
+    <ApiProvider>
+      <ThemeProvider>
+        <RouterProvider router={router} />
+      </ThemeProvider>
+    </ApiProvider>
+  );
 }
