@@ -3,4 +3,4 @@
  * Please do not edit it manually.
  */
 
-export interface DB {}
+export type DB = object;

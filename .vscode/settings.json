@@ -1,36 +1,36 @@
 {
-	"files.watcherExclude": {
-		"**/routeTree.gen.ts": true
-	},
-	"search.exclude": {
-		"**/routeTree.gen.ts": true
-	},
-	"files.readonlyInclude": {
-		"**/routeTree.gen.ts": true
-	},
+  "files.watcherExclude": {
+    "**/routeTree.gen.ts": true
+  },
+  "search.exclude": {
+    "**/routeTree.gen.ts": true
+  },
+  "files.readonlyInclude": {
+    "**/routeTree.gen.ts": true
+  },
 
-	// JS Formatting
-	"[javascript][javascriptreact][typescript][typescriptreact]": {
-		"editor.insertSpaces": false,
-		"editor.tabSize": 2,
-		"editor.formatOnSave": true,
-		"editor.defaultFormatter": "biomejs.biome",
-		"editor.maxTokenizationLineLength": 2500,
-		"editor.codeActionsOnSave": {
-			"source.organizeImports.biome": "explicit",
-			"source.fixAll": "explicit"
-		}
-	},
+  // JS Formatting
+  "[javascript][javascriptreact][typescript][typescriptreact]": {
+    "editor.tabSize": 2,
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.maxTokenizationLineLength": 2500,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit"
+    }
+  },
 
-	// JSON Formatting
-	"[json][jsonc]": {
-		"editor.insertSpaces": false,
-		"editor.tabSize": 2,
-		"editor.formatOnSave": true,
-		"editor.defaultFormatter": "biomejs.biome",
-		"editor.suggest.insertMode": "replace",
-		"editor.quickSuggestions": {
-			"strings": true
-		}
-	}
+  // JSON Formatting
+  "[json][jsonc]": {
+    "editor.tabSize": 2,
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.suggest.insertMode": "replace",
+    "editor.quickSuggestions": {
+      "strings": true
+    },
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit"
+    }
+  }
 }

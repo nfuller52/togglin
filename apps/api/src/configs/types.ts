@@ -1,1 +1,1 @@
-export type ApplicationConfig = {};
+export type ApplicationConfig = object;

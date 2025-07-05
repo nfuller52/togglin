@@ -1,23 +1,33 @@
 {
-	"name": "togglin",
-	"version": "0.1.0",
-	"author": "Nick Fuller",
-	"license": "MIT",
-	"scripts": {
-		"clean": "turbo run clean",
-		"check-types": "turbo run check-types",
-		"dev": "turbo run dev",
-		"test": "turbo run test"
-	},
-	"workspaces": [
-		"apps/*",
-		"libs/*"
-	],
-	"devDependencies": {
-		"@biomejs/biome": "^2.0.6",
-		"prettier": "^3.6.2",
-		"turbo": "^2.5.4",
-		"typescript": "^5.8.3"
-	},
-	"packageManager": "pnpm@10.12.4"
+  "name": "togglin",
+  "version": "0.1.0",
+  "author": "Nick Fuller",
+  "license": "MIT",
+  "scripts": {
+    "check-types": "turbo run check-types",
+    "clean": "turbo run clean",
+    "dev": "turbo run dev",
+    "format:write": "turbo run format:write",
+    "format": "turbo run format",
+    "lint": "turbo run lint",
+    "test": "turbo run test"
+  },
+  "workspaces": [
+    "apps/*",
+    "libs/*"
+  ],
+  "devDependencies": {
+    "@ianvs/prettier-plugin-sort-imports": "^4.4.2",
+    "@typescript-eslint/eslint-plugin": "^8.35.1",
+    "@typescript-eslint/parser": "^8.35.1",
+    "eslint": "^9.30.1",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-tsdoc": "^0.4.0",
+    "eslint-plugin-unused-imports": "^4.1.4",
+    "prettier": "^3.6.2",
+    "turbo": "^2.5.4",
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.4"
+  },
+  "packageManager": "pnpm@10.12.4"
 }

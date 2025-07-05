@@ -5,11 +5,11 @@ import { App } from "./app";
 const rootElement = document.getElementById("root");
 
 if (rootElement && !rootElement.innerHTML) {
-	const root = ReactDOM.createRoot(rootElement);
+  const root = ReactDOM.createRoot(rootElement);
 
-	root.render(
-		<StrictMode>
-			<App />
-		</StrictMode>,
-	);
+  root.render(
+    <StrictMode>
+      <App />
+    </StrictMode>,
+  );
 }
