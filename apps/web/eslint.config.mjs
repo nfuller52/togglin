@@ -6,8 +6,10 @@ import prettier from "eslint-config-prettier";
 import jsxA11y from "eslint-plugin-jsx-a11y";
 import react from "eslint-plugin-react";
 import reactHooks from "eslint-plugin-react-hooks";
+import reactRefresh from "eslint-plugin-react-refresh";
 import tsdoc from "eslint-plugin-tsdoc";
 import unusedImports from "eslint-plugin-unused-imports";
+import globals from "globals";
 
 export default [
   {
@@ -17,6 +19,10 @@ export default [
       parserOptions: {
         ecmaVersion: "latest",
         sourceType: "module",
+      },
+      globals: {
+        ...globals.browser,
+        ...globals.vitest,
       },
     },
     settings: {
@@ -28,6 +34,7 @@ export default [
       "@typescript-eslint": tseslint,
       react,
       "react-hooks": reactHooks,
+      "react-refresh": reactRefresh,
       "jsx-a11y": jsxA11y,
       tsdoc,
       "unused-imports": unusedImports,
@@ -48,6 +55,10 @@ export default [
           args: "after-used",
           argsIgnorePattern: "^_",
         },
+      ],
+      "react-refresh/only-export-components": [
+        "warn",
+        { allowConstantExport: true },
       ],
     },
   },
