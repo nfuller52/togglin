@@ -1,6 +1,6 @@
 import { createRouter, RouterProvider } from "@tanstack/react-router";
-import { ApiProvider } from "@/contexts/api-provider";
-import { ThemeProvider } from "@/contexts/theme-provider";
+import { ApiProvider } from "@/contexts/api";
+import { ThemeProvider } from "@/contexts/theme";
 import { routeTree } from "./routeTree.gen";
 
 declare module "@tanstack/react-router" {
