@@ -11,14 +11,14 @@ export type Generated<T> = T extends ColumnType<infer S, infer I, infer U>
 
 export type Timestamp = ColumnType<Date, Date | string, Date | string>;
 
-export interface TenantsOrganizations {
+export interface TenantsOrganization {
   createdAt: Generated<Timestamp>;
   id: Generated<string>;
   name: string;
   updatedAt: Generated<Timestamp>;
 }
 
-export interface TenantsPrograms {
+export interface TenantsProgram {
   createdAt: Generated<Timestamp>;
   id: Generated<string>;
   name: string;
@@ -27,6 +27,6 @@ export interface TenantsPrograms {
 }
 
 export interface DB {
-  tenantsOrganizations: TenantsOrganizations;
-  tenantsPrograms: TenantsPrograms;
+  tenantsOrganizations: TenantsOrganization;
+  tenantsPrograms: TenantsProgram;
 }

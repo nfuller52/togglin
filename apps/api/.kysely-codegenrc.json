@@ -3,5 +3,6 @@
   "defaultSchemas": ["public"],
   "dialect": "postgres",
   "envFile": ".env",
-  "outFile": "./src/db/db.d.ts"
+  "outFile": "./src/db/db.d.ts",
+  "singularize": true
 }
