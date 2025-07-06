@@ -43,13 +43,15 @@ mkdir -p "$MIGRATION_DIR"
 cat > "$OUTPUT_FILEPATH" <<EOF
 import type { Kysely } from "kysely";
 
-// biome-ignore lint/suspicious/noExplicitAny: amigration
-export async function up(db: Kysely<any>): Promise<void> {
+import "@/db/utils/kysely-extensions";
+
+const TABLE_NAME = "";
+
+export async function up(db: Kysely<unknown>): Promise<void> {
 	// Migration code
 }
 
-// biome-ignore lint/suspicious/noExplicitAny: amigration
-export async function down(db: Kysely<any>): Promise<void> {
+export async function down(db: Kysely<unknown>): Promise<void> {
 	// Migration code
 }
 
