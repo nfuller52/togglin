@@ -21,10 +21,16 @@ async function runMigrations(direction: "up" | "down") {
         database: config.env.DATABASE_NAME,
         host: config.env.DATABASE_HOST,
         port: config.env.DATABASE_PORT,
-        user: config.env.DATABASE_USER,
-        password: config.env.DATABASE_PASSWORD,
+        user: config.env.DATABASE_MIGRATION_USER,
+        password: config.env.DATABASE_MIGRATION_PASSWORD,
       }),
     }),
+    log(event) {
+      if (event.level === "query") {
+        const { sql, parameters } = event.query;
+        console.log({ sql, parameters });
+      }
+    },
   });
 
   const migrator = new Migrator({
