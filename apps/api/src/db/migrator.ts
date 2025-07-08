@@ -14,25 +14,19 @@ import { config } from "@/configs";
 
 const MIGRATIONS_DIR = path.join(__dirname, "migrations");
 
-async function runMigrations(direction: "up" | "down") {
-  const db = new Kysely<DB>({
-    dialect: new PostgresDialect({
-      pool: new Pool({
-        database: config.env.DATABASE_NAME,
-        host: config.env.DATABASE_HOST,
-        port: config.env.DATABASE_PORT,
-        user: config.env.DATABASE_MIGRATION_USER,
-        password: config.env.DATABASE_MIGRATION_PASSWORD,
-      }),
+export const db = new Kysely<DB>({
+  dialect: new PostgresDialect({
+    pool: new Pool({
+      database: config.env.DATABASE_NAME,
+      host: config.env.DATABASE_HOST,
+      port: config.env.DATABASE_PORT,
+      user: config.env.DATABASE_MIGRATION_USER,
+      password: config.env.DATABASE_MIGRATION_PASSWORD,
     }),
-    log(event) {
-      if (event.level === "query") {
-        const { sql, parameters } = event.query;
-        console.log({ sql, parameters });
-      }
-    },
-  });
+  }),
+});
 
+async function runMigrations(direction: "up" | "down") {
   const migrator = new Migrator({
     db,
     provider: new FileMigrationProvider({
@@ -42,7 +36,7 @@ async function runMigrations(direction: "up" | "down") {
     }),
   });
 
-  console.log("Running Migrations...");
+  console.info("Running Migrations...");
 
   let migrationResult: MigrationResultSet;
   if (direction === "up") {
@@ -55,7 +49,7 @@ async function runMigrations(direction: "up" | "down") {
 
   results?.forEach((it) => {
     if (it.status === "Success") {
-      console.log(`  -> SUCCESS: "${it.migrationName}"`);
+      console.info(`  -> SUCCESS: "${it.migrationName}"`);
     } else {
       console.error(`  -> FAILURE: "${it.migrationName}"`);
     }

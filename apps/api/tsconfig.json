@@ -19,6 +19,12 @@
       "@module/*": ["src/modules/*"]
     }
   },
-  "include": ["src/**/*.ts", "vite.config.ts", "vite.setup.ts"],
+  "include": [
+    "scripts/**/*.ts",
+    "src/**/*.ts",
+    "tests/**/*.ts",
+    "vitest.config.ts",
+    "vitest.setup.ts"
+  ],
   "exclude": ["node_modules", ".turbo"]
 }

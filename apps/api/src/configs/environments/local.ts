@@ -1,7 +1,5 @@
 import type { ApplicationConfig } from "../types";
 
-import dotenv from "dotenv";
-
-dotenv.config();
+console.info("Loading Local configurations...");
 
 export const local: ApplicationConfig = {};

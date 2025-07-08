@@ -12,7 +12,7 @@ const applicationEnvironment: {
   test,
 };
 
-export const config = {
+export const config: ApplicationConfig & { env: typeof env } = {
   ...applicationEnvironment[env.NODE_ENV],
   env,
 };
