@@ -1,18 +1,24 @@
 import type { ApplicationConfig } from "./types";
 
 import { env } from "./env";
-import { local } from "./environments/local";
-import { test } from "./environments/test";
 
-const applicationEnvironment: {
-  local: ApplicationConfig;
-  test: ApplicationConfig;
-} = {
-  local,
-  test,
-};
+let appConfig: ApplicationConfig;
+
+switch (env.NODE_ENV) {
+  case "test": {
+    const { app } = require("./environments/test");
+    appConfig = app;
+    break;
+  }
+  case "local":
+  default: {
+    const { app } = require("./environments/local");
+    appConfig = app;
+    break;
+  }
+}
 
 export const config: ApplicationConfig & { env: typeof env } = {
-  ...applicationEnvironment[env.NODE_ENV],
+  ...appConfig,
   env,
 };

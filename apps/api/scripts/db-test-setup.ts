@@ -41,8 +41,18 @@ const COMMAND_ARGS: {
 } = {
   DROP: [...psqlConnection, "--command", `DROP DATABASE IF EXISTS ${DB_NAME};`],
   CREATE: [...psqlConnection, "--command", `CREATE DATABASE ${DB_NAME};`],
-  // ! CONNECTING TO postgres AND SHOULD CONNECT TO togglin_test
-  LOAD_STRUCTURE: [...psqlConnection, "-f"],
+  LOAD_STRUCTURE: [
+    "--username",
+    DB_USER ?? "",
+    "--host",
+    DB_HOST ?? "",
+    "--port",
+    DB_PORT ?? "5432",
+    "--dbname",
+    DB_NAME ?? "",
+    "--quiet",
+    "-f",
+  ],
   CREATE_USER: [
     ...psqlConnection,
     "--command",
@@ -51,9 +61,16 @@ const COMMAND_ARGS: {
      EXCEPTION WHEN duplicate_object THEN -- do nothing
      END \$\$;`,
   ],
-  // ! CONNECTING TO postgres AND SHOULD CONNECT TO togglin_test
   GRANT_USER: [
-    ...psqlConnection,
+    "--username",
+    DB_USER ?? "",
+    "--host",
+    DB_HOST ?? "",
+    "--port",
+    DB_PORT ?? "5432",
+    "--dbname",
+    DB_NAME ?? "",
+    "--quiet",
     "--command",
     `GRANT CONNECT ON DATABASE ${DB_NAME} TO ${DB_APP_USER};
      GRANT USAGE ON SCHEMA public TO ${DB_APP_USER};
