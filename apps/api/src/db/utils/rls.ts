@@ -47,7 +47,8 @@ export type RlsPolicyBuilder = {
  * );
  */
 export async function createDefaultRls(
-  db: Kysely<unknown>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  db: Kysely<any>,
   tableName: string,
   checkFieldName: string,
   checkFieldDataType: string,
@@ -102,7 +103,7 @@ export async function createDefaultRls(
  * @returns A `sql` object representing a compiled RLS `CREATE POLICY` SQL statement.
  *
  * @example
- * rlsPolicyBuilder({
+ * rlsPolicyBuilder(
  *   tableName: 'tenants_organizations',
  *   mode: 'SELECT',
  *   strategy: 'USING',
@@ -110,7 +111,7 @@ export async function createDefaultRls(
  *   checkFieldName: 'organization_id',
  *   checkFieldDataType: 'uuid',
  *   sessionKey: 'app.current_organization'
- * });
+ * );
  */
 export function rlsPolicyBuilder({
   tableName,
@@ -165,7 +166,8 @@ export async function removeDefaultRls(db: Kysely<unknown>, tableName: string) {
  * @param tableName - Name of the table to apply RLS
  * @returns Promise that resolves when RLS is enabled
  */
-export async function enableRls(db: Kysely<unknown>, tableName: string) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function enableRls(db: Kysely<any>, tableName: string) {
   await rlsPolicy(db, tableName, "ENABLE");
 }
 
@@ -176,7 +178,8 @@ export async function enableRls(db: Kysely<unknown>, tableName: string) {
  * @param tableName - Name of the table to apply RLS
  * @returns Promise that resolves when RLS is disabled
  */
-export async function disableRls(db: Kysely<unknown>, tableName: string) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function disableRls(db: Kysely<any>, tableName: string) {
   await rlsPolicy(db, tableName, "DISABLE");
 }
 

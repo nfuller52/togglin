@@ -25,6 +25,7 @@ if (isDockerRunning(DB_CONTAINER)) {
 }
 
 function dumpStructureFile(rootBinary: "docker" | "pg_dump", args: string[]) {
+  // eslint-disable-next-line security/detect-non-literal-fs-filename
   const outputStream = createWriteStream(STRUCTURE_FILE_PATH);
 
   // https://nodejs.org/api/child_process.html#child_processspawncommand-args-options

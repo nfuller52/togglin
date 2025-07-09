@@ -1,26 +1,40 @@
-import { db } from "@/db/migrator";
-import { createDefaultRls, rlsPolicyBuilder } from "@/db/utils/rls";
-
-// const mockDb = new Kysely<unknown>({
-//   dialect: new SqliteDialect({ database: {} as SqliteDatabase }),
-// });
+import { migrationDb as db } from "@db";
+import { sql } from "kysely";
+import {
+  createDefaultRls,
+  disableRls,
+  enableRls,
+  rlsPolicyBuilder,
+} from "@/db/utils/rls";
 
 describe("createDefaultRls", () => {
-  it("applies 5x default policies for organization", async () => {
-    const tableName = "tenants_organizations";
-    const checkFieldName = "id";
-    const checkFieldDataType = "uuid";
-    const sessionKey = "app.context.organization_id";
+  const tempTable = "module_table";
 
+  beforeAll(async () => {
+    await db.schema.createTable(tempTable).addColumn("id", "bigint").execute();
+    await enableRls(db, tempTable);
+  });
+
+  afterAll(async () => {
+    await disableRls(db, tempTable);
+    await db.schema.dropTable(tempTable).ifExists().execute();
+  });
+
+  it("applies 5x default policies for organization", async () => {
     await createDefaultRls(
       db,
-      tableName,
-      checkFieldName,
-      checkFieldDataType,
-      sessionKey,
+      tempTable,
+      "id",
+      "bigint",
+      "app.context.organization_id",
     );
 
-    expect(rlsPolicyBuilder).toHaveBeenCalledTimes(5);
+    const result =
+      await sql<string>`SELECT * FROM pg_catalog.pg_policies WHERE tablename = ${sql.lit(tempTable)}`.execute(
+        db,
+      );
+
+    expect(result.rows.length).toEqual(5);
   });
 });
 

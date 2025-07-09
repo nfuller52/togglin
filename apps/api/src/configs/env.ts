@@ -1,14 +1,5 @@
+import { config } from "dotenv";
 import { z } from "zod";
-
-const app_env = process.env.NODE_ENV ?? "local";
-
-if (["local", "test"].includes(app_env)) {
-  require("dotenv").config({
-    path: `.env.${app_env}`,
-    override: true,
-    quiet: true,
-  });
-}
 
 const EnvSchema = z.object({
   // Application
@@ -28,4 +19,16 @@ const EnvSchema = z.object({
   DATABASE_MIGRATION_PASSWORD: z.string(),
 });
 
-export const env = EnvSchema.parse(process.env);
+export function loadEnvironment() {
+  const appEnvironment = process.env.NODE_ENV ?? "local";
+
+  if (["local", "test"].includes(appEnvironment)) {
+    config({
+      path: `.env.${appEnvironment}`,
+      override: true,
+      quiet: true,
+    });
+  }
+
+  return EnvSchema.parse(process.env);
+}
