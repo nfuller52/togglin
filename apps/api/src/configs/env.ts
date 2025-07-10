@@ -1,3 +1,4 @@
+import { config } from "dotenv";
 import { z } from "zod";
 
 const EnvSchema = z.object({
@@ -8,12 +9,26 @@ const EnvSchema = z.object({
   PORT: z.coerce.number().default(4000),
 
   // Database
-  DATABASE_NAME: z.string().default("togglin-local"),
-  DATABASE_HOST: z.string().default("localhost"),
-  DATABASE_PORT: z.coerce.number().default(5432),
-  DATABASE_USER: z.string().default("togglin"),
-  DATABASE_PASSWORD: z.string().default("togglin"),
-  DATABASE_POOL_MAX: z.coerce.number().default(10),
+  DATABASE_NAME: z.string(),
+  DATABASE_HOST: z.string(),
+  DATABASE_PORT: z.coerce.number(),
+  DATABASE_USER: z.string(),
+  DATABASE_PASSWORD: z.string(),
+  DATABASE_POOL_MAX: z.coerce.number(),
+  DATABASE_MIGRATION_USER: z.string(),
+  DATABASE_MIGRATION_PASSWORD: z.string(),
 });
 
-export const env = EnvSchema.parse(process.env);
+export function loadEnvironment() {
+  const appEnvironment = process.env.NODE_ENV ?? "local";
+
+  if (["local", "test"].includes(appEnvironment)) {
+    config({
+      path: `.env.${appEnvironment}`,
+      override: true,
+      quiet: true,
+    });
+  }
+
+  return EnvSchema.parse(process.env);
+}

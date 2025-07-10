@@ -2,6 +2,7 @@
   "camelCase": true,
   "defaultSchemas": ["public"],
   "dialect": "postgres",
-  "envFile": ".env",
-  "outFile": "./src/db/db.d.ts"
+  "envFile": ".env.local",
+  "outFile": "./src/db/db.d.ts",
+  "singularize": true
 }

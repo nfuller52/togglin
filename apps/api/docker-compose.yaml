@@ -1,13 +1,14 @@
 services:
   db:
     image: postgres:17-alpine
+    container_name: togglin_db
     restart: always
     ports:
       - 5432:5432
     environment:
-      POSTGRES_USER: togglin
-      POSTGRES_PASSWORD: togglin
-      POSTGRES_DB: togglin-local
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: togglin_local
       PGDATA: /var/lib/postgresql/data/pgdata
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
@@ -18,6 +19,7 @@ services:
       - togglin_network
     volumes:
       - togglin_db_data:/var/lib/postgresql/data/pgdata
+      - ./scripts/entrypoints/local-db-init.sql:/docker-entrypoint-initdb.d/init.sql:ro
 
 volumes:
   togglin_db_data:

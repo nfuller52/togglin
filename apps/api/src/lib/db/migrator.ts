@@ -1,34 +1,15 @@
 import type { MigrationResultSet } from "kysely";
-import type { DB } from "./db";
 
 import { promises as fs } from "node:fs";
 import * as path from "node:path";
-import {
-  FileMigrationProvider,
-  Kysely,
-  Migrator,
-  PostgresDialect,
-} from "kysely";
-import { Pool } from "pg";
-import { config } from "@/configs";
+import { FileMigrationProvider, Migrator } from "kysely";
+import { migrationDb } from "./database";
 
 const MIGRATIONS_DIR = path.join(__dirname, "migrations");
 
 async function runMigrations(direction: "up" | "down") {
-  const db = new Kysely<DB>({
-    dialect: new PostgresDialect({
-      pool: new Pool({
-        database: config.env.DATABASE_NAME,
-        host: config.env.DATABASE_HOST,
-        port: config.env.DATABASE_PORT,
-        user: config.env.DATABASE_USER,
-        password: config.env.DATABASE_PASSWORD,
-      }),
-    }),
-  });
-
   const migrator = new Migrator({
-    db,
+    db: migrationDb,
     provider: new FileMigrationProvider({
       fs,
       path,
@@ -36,7 +17,7 @@ async function runMigrations(direction: "up" | "down") {
     }),
   });
 
-  console.log("Running Migrations...");
+  console.info("Running Migrations...");
 
   let migrationResult: MigrationResultSet;
   if (direction === "up") {
@@ -49,7 +30,7 @@ async function runMigrations(direction: "up" | "down") {
 
   results?.forEach((it) => {
     if (it.status === "Success") {
-      console.log(`  -> SUCCESS: "${it.migrationName}"`);
+      console.info(`  -> SUCCESS: "${it.migrationName}"`);
     } else {
       console.error(`  -> FAILURE: "${it.migrationName}"`);
     }
@@ -62,7 +43,7 @@ async function runMigrations(direction: "up" | "down") {
   }
 
   // close the connection
-  await db.destroy();
+  await migrationDb.destroy();
 }
 
 const direction = process.argv[2] === "down" ? "down" : "up";

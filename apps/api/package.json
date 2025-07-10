@@ -5,15 +5,17 @@
     "build": "tsc --build",
     "check-types": "tsc --noEmit",
     "clean": "rm -rf dist",
+    "db:generate-schema": "tsx scripts/generate-structure-sql.ts",
     "db:generate-types": "kysely-codegen",
     "db:migrate:create": "pnpm exec sh scripts/migration-create.sh",
     "db:migrate:rollback": "tsx src/db/migrator.ts down && pnpm db:generate-types",
-    "db:migrate": "pnpm db:migration-links && tsx src/db/migrator.ts up && pnpm db:generate-types",
+    "db:migrate": "pnpm db:migration-links && tsx src/db/migrator.ts up && pnpm db:generate-types && pnpm db:generate-schema",
     "db:migration-links": "pnpm exec sh scripts/migration-links.sh",
-    "dev": "ts-node-dev src/app.ts",
+    "dev": "NODE_ENV=local ts-node-dev -r tsconfig-paths/register src/index.ts",
     "format:write": "prettier . --write",
     "format": "prettier . --check",
     "lint": "eslint . --cache",
+    "test:db:setup": "tsx scripts/db-test-setup.ts",
     "test:watch": "vitest",
     "test": "vitest run"
   },
@@ -30,8 +32,8 @@
     "eslint-plugin-security": "^3.0.1",
     "kysely-codegen": "^0.18.5",
     "ts-node-dev": "^2.0.0",
-    "tsx": "^4.20.3",
-    "vite-tsconfig-paths": "^5.1.4"
+    "tsconfig-paths": "^4.2.0",
+    "tsx": "^4.20.3"
   },
   "dependencies": {
     "cors": "^2.8.5",

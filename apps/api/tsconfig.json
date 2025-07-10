@@ -3,7 +3,7 @@
   "compilerOptions": {
     "target": "ES2022",
     "lib": ["ES2022"],
-    "module": "ESNext",
+    "module": "CommonJs",
     "moduleResolution": "node",
     "outDir": "dist",
     "strict": true,
@@ -15,10 +15,17 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
-      "@db": ["src/db/database.ts"],
+      "@app": ["src/configs/app"],
+      "@db": ["src/lib/db/database.ts"],
       "@module/*": ["src/modules/*"]
     }
   },
-  "include": ["src/**/*.ts", "vite.config.ts", "vite.setup.ts"],
+  "include": [
+    "scripts/**/*.ts",
+    "src/**/*.ts",
+    "tests/**/*.ts",
+    "vitest.config.ts",
+    "vitest.setup.ts"
+  ],
   "exclude": ["node_modules", ".turbo"]
 }
