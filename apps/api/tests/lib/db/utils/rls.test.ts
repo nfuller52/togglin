@@ -5,7 +5,7 @@ import {
   disableRls,
   enableRls,
   rlsPolicyBuilder,
-} from "@/db/utils/rls";
+} from "@/lib/db/utils/rls";
 
 describe("createDefaultRls", () => {
   const tempTable = "module_table";

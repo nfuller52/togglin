@@ -16,7 +16,7 @@
     "paths": {
       "@/*": ["src/*"],
       "@app": ["src/configs/app"],
-      "@db": ["src/db/database.ts"],
+      "@db": ["src/lib/db/database.ts"],
       "@module/*": ["src/modules/*"]
     }
   },
