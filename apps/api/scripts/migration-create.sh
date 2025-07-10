@@ -43,16 +43,16 @@ mkdir -p "$MIGRATION_DIR"
 cat > "$OUTPUT_FILEPATH" <<EOF
 import type { Kysely } from "kysely";
 
-import "@/db/utils/kysely-extensions";
+import "@/lib/db/utils/kysely-extensions";
 
 const TABLE_NAME = "";
 
 export async function up(db: Kysely<unknown>): Promise<void> {
-	// Migration code
+  // Migration code
 }
 
 export async function down(db: Kysely<unknown>): Promise<void> {
-	// Migration code
+  // Migration code
 }
 
 EOF

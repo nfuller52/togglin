@@ -17,6 +17,7 @@
       "@/*": ["src/*"],
       "@app": ["src/configs/app"],
       "@db": ["src/lib/db/database.ts"],
+      "@logger": ["src/lib/logging/index.ts"],
       "@module/*": ["src/modules/*"]
     }
   },

@@ -1,10 +1,10 @@
 import type { Kysely } from "kysely";
 
 import { sql } from "kysely";
-import { createDefaultRls, removeDefaultRls } from "@/db/utils/rls";
+import { createDefaultRls, removeDefaultRls } from "@/lib/db/utils/rls";
 import { RlsService } from "@/modules/common";
 
-import "@/db/utils/kysely-extensions";
+import "@/lib/db/utils/kysely-extensions";
 
 const TABLE_NAME = "tenants_programs";
 

@@ -8,7 +8,7 @@ set -euo pipefail
 
 SCRIPT_DIR=$(cd "$( dirname "$0" )" && pwd)
 API_ROOT=$(cd "$SCRIPT_DIR/.." && pwd)
-DEST_DIR="$API_ROOT/src/db/migrations"
+DEST_DIR="$API_ROOT/src/lib/db/migrations"
 
 # ensure the dir exists
 mkdir -p "$DEST_DIR"
@@ -23,7 +23,7 @@ for dir in "$API_ROOT"/src/modules/*/migrations; do
     for file in "$dir"/*.ts; do
       [ -e "$file" ] || continue
       filename=$(basename "$file")
-      ln -s "$file" "src/db/migrations/$filename"
+      ln -s "$file" "src/lib/db/migrations/$filename"
     done
   fi
 done

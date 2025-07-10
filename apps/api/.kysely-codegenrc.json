@@ -1,8 +1,8 @@
 {
-  "camelCase": true,
+  "camelCase": false,
   "defaultSchemas": ["public"],
   "dialect": "postgres",
   "envFile": ".env.local",
-  "outFile": "./src/db/db.d.ts",
+  "outFile": "./src/lib/db/db.d.ts",
   "singularize": true
 }

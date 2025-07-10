@@ -1,10 +1,14 @@
-import type { RlsPolicyBuilder } from "@/db/utils/rls";
+import type { RlsPolicyBuilder } from "@/lib/db/utils/rls";
 import type { Kysely } from "kysely";
 
-import { enableRls, removeDefaultRls, rlsPolicyBuilder } from "@/db/utils/rls";
+import {
+  enableRls,
+  removeDefaultRls,
+  rlsPolicyBuilder,
+} from "@/lib/db/utils/rls";
 import { RlsService } from "@/modules/common";
 
-import "@/db/utils/kysely-extensions";
+import "@/lib/db/utils/kysely-extensions";
 
 const TABLE_NAME = "tenants_organizations";
 
