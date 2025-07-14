@@ -17,16 +17,11 @@
       "@/*": ["src/*"],
       "@app": ["src/configs/app"],
       "@db": ["src/lib/db/database.ts"],
+      "@lib/*": ["src/lib/*"],
       "@logger": ["src/lib/logging/index.ts"],
-      "@module/*": ["src/modules/*"]
+      "@modules/*": ["src/modules/*"]
     }
   },
-  "include": [
-    "scripts/**/*.ts",
-    "src/**/*.ts",
-    "tests/**/*.ts",
-    "vitest.config.ts",
-    "vitest.setup.ts"
-  ],
+  "include": ["scripts", "src", "tests", "vitest.config.ts", "vitest.setup.ts"],
   "exclude": ["node_modules", ".turbo"]
 }

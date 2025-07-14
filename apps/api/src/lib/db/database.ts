@@ -1,4 +1,4 @@
-import type { ErrorLogEvent, QueryLogEvent } from "kysely";
+import type { LogEvent } from "kysely";
 import type { DB } from "./db";
 
 import { app } from "@app";
@@ -34,8 +34,14 @@ const dialect = new PostgresDialect({
 export const db = new Kysely<DB>({
   dialect,
   log(event) {
-    function formatSqlSingleLine(event: QueryLogEvent | ErrorLogEvent): string {
-      return `[sql] (${Math.round(event.queryDurationMillis) / 100}ms) ${removeNewlines(event.query.sql)}`;
+    function formatSqlSingleLine(event: LogEvent): string {
+      logger.debug(event.query.parameters.join(", "));
+      const parameters =
+        event.query.parameters.length > 0
+          ? ` (${event.query.parameters.join(", ")})`
+          : "";
+
+      return `[sql] (${Math.round(event.queryDurationMillis) / 100}ms) ${removeNewlines(event.query.sql)}${parameters}`;
     }
 
     function removeNewlines(sql: string): string {

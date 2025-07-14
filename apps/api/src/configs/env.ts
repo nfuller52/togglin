@@ -1,6 +1,8 @@
 import { config } from "dotenv";
 import { z } from "zod";
 
+export type ApplicationEnvironment = z.infer<typeof EnvSchema>["NODE_ENV"];
+
 const EnvSchema = z.object({
   // Application
   NODE_ENV: z.enum(["local", "test", "production"]),
