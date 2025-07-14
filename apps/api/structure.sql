@@ -50,6 +50,19 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
+-- Name: accounts_users; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.accounts_users (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    updated_at timestamp with time zone DEFAULT now() NOT NULL,
+    name text NOT NULL,
+    email public.citext NOT NULL
+);
+
+
+--
 -- Name: kysely_migration; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -66,6 +79,19 @@ CREATE TABLE public.kysely_migration (
 CREATE TABLE public.kysely_migration_lock (
     id character varying(255) NOT NULL,
     is_locked integer DEFAULT 0 NOT NULL
+);
+
+
+--
+-- Name: tenants_organization_memberships; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.tenants_organization_memberships (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    updated_at timestamp with time zone DEFAULT now() NOT NULL,
+    user_id uuid NOT NULL,
+    organization_id uuid NOT NULL
 );
 
 
@@ -95,6 +121,14 @@ CREATE TABLE public.tenants_programs (
 
 
 --
+-- Name: accounts_users accounts_users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.accounts_users
+    ADD CONSTRAINT accounts_users_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: kysely_migration_lock kysely_migration_lock_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -108,6 +142,14 @@ ALTER TABLE ONLY public.kysely_migration_lock
 
 ALTER TABLE ONLY public.kysely_migration
     ADD CONSTRAINT kysely_migration_pkey PRIMARY KEY (name);
+
+
+--
+-- Name: tenants_organization_memberships tenants_organization_memberships_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.tenants_organization_memberships
+    ADD CONSTRAINT tenants_organization_memberships_pkey PRIMARY KEY (id);
 
 
 --
@@ -132,6 +174,36 @@ ALTER TABLE ONLY public.tenants_programs
 
 ALTER TABLE ONLY public.tenants_programs
     ADD CONSTRAINT tenants_projects_uniq_name_org_id UNIQUE (name, organization_id);
+
+
+--
+-- Name: accounts_users_email; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX accounts_users_email ON public.accounts_users USING btree (email);
+
+
+--
+-- Name: tenants_organization_memberships_uniq_membership; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX tenants_organization_memberships_uniq_membership ON public.tenants_organization_memberships USING btree (user_id, organization_id);
+
+
+--
+-- Name: tenants_organization_memberships tenants_organization_memberships_organization_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.tenants_organization_memberships
+    ADD CONSTRAINT tenants_organization_memberships_organization_id_fkey FOREIGN KEY (organization_id) REFERENCES public.tenants_organizations(id) ON DELETE RESTRICT;
+
+
+--
+-- Name: tenants_organization_memberships tenants_organization_memberships_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.tenants_organization_memberships
+    ADD CONSTRAINT tenants_organization_memberships_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.accounts_users(id) ON DELETE CASCADE;
 
 
 --
