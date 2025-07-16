@@ -10,11 +10,13 @@ export function paginatedResponse<T>({
   limit: number;
 }) {
   const totalPages = Math.ceil(total / limit);
+  const adjustedPage = page > totalPages ? totalPages : page - 1;
+  const prevPage = page > 1 ? adjustedPage : null;
 
   return {
     data,
     total,
-    prevPage: page > 1 ? page - 1 : null,
+    prevPage,
     nextPage: page < totalPages ? page + 1 : null,
   };
 }

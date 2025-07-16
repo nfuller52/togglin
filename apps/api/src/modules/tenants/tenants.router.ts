@@ -5,5 +5,6 @@ import { TenantsContext } from "./types";
 export const createTenantsRouter = withV1Router<TenantsContext>(
   (context, router) => {
     router.get("/organizations", OrganizationsController.list(context));
+    router.post("/organizations", OrganizationsController.post(context));
   },
 );

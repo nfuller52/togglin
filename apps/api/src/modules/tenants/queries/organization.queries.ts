@@ -1,5 +1,5 @@
 import type { DB } from "@/lib/db/db";
-import type { PaginationParams } from "@lib/modules/pagination/schema";
+import type { PaginationParams } from "@shared/schemas/pagination";
 import type { Kysely } from "kysely";
 
 import { TENANTS_ORGANIZATIONS_TABLE } from "../constants";

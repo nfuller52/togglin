@@ -1,5 +1,6 @@
 import type { DB } from "@/lib/db/db";
-import type { PaginationParams } from "@lib/modules/pagination/schema";
+import type { OrganizationCreateParams } from "@shared/schemas/organizations";
+import type { PaginationParams } from "@shared/schemas/pagination";
 import type { Kysely } from "kysely";
 
 import { TENANTS_ORGANIZATIONS_TABLE } from "./constants";
@@ -10,7 +11,7 @@ async function listOrganizations(
 ) {
   const offset = (paginationParams.page - 1) * paginationParams.limit;
 
-  return db
+  return await db
     .selectFrom(TENANTS_ORGANIZATIONS_TABLE)
     .selectAll(TENANTS_ORGANIZATIONS_TABLE)
     .limit(paginationParams.limit)
@@ -19,22 +20,34 @@ async function listOrganizations(
 }
 
 async function countOrganizations(db: Kysely<DB>) {
-  return db
+  return await db
     .selectFrom(TENANTS_ORGANIZATIONS_TABLE)
     .select(({ fn }) => [fn.countAll().as("count")])
     .executeTakeFirst();
 }
 
 async function getOrganization(db: Kysely<DB>, id: string) {
-  return db
+  return await db
     .selectFrom(TENANTS_ORGANIZATIONS_TABLE)
     .selectAll()
     .where("id", "=", id)
     .executeTakeFirst();
 }
 
-export const TenantsData = {
+async function createOrganization(
+  db: Kysely<DB>,
+  orgParams: OrganizationCreateParams,
+) {
+  return db
+    .insertInto(TENANTS_ORGANIZATIONS_TABLE)
+    .values(orgParams)
+    .returningAll()
+    .executeTakeFirst();
+}
+
+export const TenantsQueries = {
   countOrganizations,
+  createOrganization,
   getOrganization,
   listOrganizations,
 };

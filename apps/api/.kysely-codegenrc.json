@@ -1,5 +1,5 @@
 {
-  "camelCase": false,
+  "camelCase": true,
   "defaultSchemas": ["public"],
   "dialect": "postgres",
   "envFile": ".env.local",

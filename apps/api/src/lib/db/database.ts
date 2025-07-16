@@ -3,7 +3,7 @@ import type { DB } from "./db";
 
 import { app } from "@app";
 import { logger } from "@logger";
-import { Kysely, PostgresDialect } from "kysely";
+import { CamelCasePlugin, Kysely, PostgresDialect } from "kysely";
 import { Pool } from "pg";
 
 const pgPool = new Pool({
@@ -33,6 +33,7 @@ const dialect = new PostgresDialect({
 
 export const db = new Kysely<DB>({
   dialect,
+  plugins: [new CamelCasePlugin()],
   log(event) {
     function formatSqlSingleLine(event: LogEvent): string {
       logger.debug(event.query.parameters.join(", "));

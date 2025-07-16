@@ -1,12 +1,13 @@
 import type { ServiceDataSource } from "@/lib/db/types";
-import type { PaginationParams } from "@lib/modules/pagination/schema";
+import type { OrganizationCreateParams } from "@shared/schemas/organizations";
+import type { PaginationParams } from "@shared/schemas/pagination";
 
-import { TenantsData } from "../tenants.queries";
+import { TenantsQueries } from "../tenants.queries";
 
 async function list(db: ServiceDataSource, paginationParams: PaginationParams) {
   const [data, countResult] = await Promise.all([
-    TenantsData.listOrganizations(db, paginationParams),
-    TenantsData.countOrganizations(db),
+    TenantsQueries.listOrganizations(db, paginationParams),
+    TenantsQueries.countOrganizations(db),
   ]);
 
   const total = countResult?.count ?? 0;
@@ -15,11 +16,20 @@ async function list(db: ServiceDataSource, paginationParams: PaginationParams) {
 }
 
 async function get(db: ServiceDataSource, id: string) {
-  const data = TenantsData.getOrganization(db, id);
+  const data = TenantsQueries.getOrganization(db, id);
   return { data };
+}
+
+async function create(
+  db: ServiceDataSource,
+  orgParams: OrganizationCreateParams,
+) {
+  const data = TenantsQueries.createOrganization(db, orgParams);
+  return data;
 }
 
 export const OrganizationService = {
   list,
   get,
+  create,
 };

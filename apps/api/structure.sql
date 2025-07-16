@@ -103,7 +103,8 @@ CREATE TABLE public.tenants_organizations (
     id uuid DEFAULT gen_random_uuid() NOT NULL,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
     updated_at timestamp with time zone DEFAULT now() NOT NULL,
-    name text NOT NULL
+    name text NOT NULL,
+    owner_id uuid NOT NULL
 );
 
 
@@ -207,88 +208,20 @@ ALTER TABLE ONLY public.tenants_organization_memberships
 
 
 --
+-- Name: tenants_organizations tenants_organizations_owner_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.tenants_organizations
+    ADD CONSTRAINT tenants_organizations_owner_id_fkey FOREIGN KEY (owner_id) REFERENCES public.accounts_users(id) ON DELETE RESTRICT;
+
+
+--
 -- Name: tenants_programs tenants_programs_organization_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tenants_programs
     ADD CONSTRAINT tenants_programs_organization_id_fkey FOREIGN KEY (organization_id) REFERENCES public.tenants_organizations(id) ON DELETE CASCADE;
 
-
---
--- Name: tenants_organizations rls_tenants_organizations_mutate_insert; Type: POLICY; Schema: public; Owner: -
---
-
-CREATE POLICY rls_tenants_organizations_mutate_insert ON public.tenants_organizations FOR INSERT WITH CHECK (true);
-
-
---
--- Name: tenants_organizations rls_tenants_organizations_mutate_update; Type: POLICY; Schema: public; Owner: -
---
-
-CREATE POLICY rls_tenants_organizations_mutate_update ON public.tenants_organizations FOR UPDATE WITH CHECK ((id = (current_setting('app.current_organization'::text, true))::uuid));
-
-
---
--- Name: tenants_organizations rls_tenants_organizations_read_delete; Type: POLICY; Schema: public; Owner: -
---
-
-CREATE POLICY rls_tenants_organizations_read_delete ON public.tenants_organizations FOR DELETE USING (false);
-
-
---
--- Name: tenants_organizations rls_tenants_organizations_read_select; Type: POLICY; Schema: public; Owner: -
---
-
-CREATE POLICY rls_tenants_organizations_read_select ON public.tenants_organizations FOR SELECT USING ((id = (current_setting('app.current_organization'::text, true))::uuid));
-
-
---
--- Name: tenants_organizations rls_tenants_organizations_read_update; Type: POLICY; Schema: public; Owner: -
---
-
-CREATE POLICY rls_tenants_organizations_read_update ON public.tenants_organizations FOR UPDATE USING ((id = (current_setting('app.current_organization'::text, true))::uuid));
-
-
---
--- Name: tenants_programs rls_tenants_programs_mutate_insert; Type: POLICY; Schema: public; Owner: -
---
-
-CREATE POLICY rls_tenants_programs_mutate_insert ON public.tenants_programs FOR INSERT WITH CHECK ((organization_id = (current_setting('app.current_organization'::text, true))::uuid));
-
-
---
--- Name: tenants_programs rls_tenants_programs_mutate_update; Type: POLICY; Schema: public; Owner: -
---
-
-CREATE POLICY rls_tenants_programs_mutate_update ON public.tenants_programs FOR UPDATE WITH CHECK ((organization_id = (current_setting('app.current_organization'::text, true))::uuid));
-
-
---
--- Name: tenants_programs rls_tenants_programs_read_delete; Type: POLICY; Schema: public; Owner: -
---
-
-CREATE POLICY rls_tenants_programs_read_delete ON public.tenants_programs FOR DELETE USING (false);
-
-
---
--- Name: tenants_programs rls_tenants_programs_read_select; Type: POLICY; Schema: public; Owner: -
---
-
-CREATE POLICY rls_tenants_programs_read_select ON public.tenants_programs FOR SELECT USING ((organization_id = (current_setting('app.current_organization'::text, true))::uuid));
-
-
---
--- Name: tenants_programs rls_tenants_programs_read_update; Type: POLICY; Schema: public; Owner: -
---
-
-CREATE POLICY rls_tenants_programs_read_update ON public.tenants_programs FOR UPDATE USING ((organization_id = (current_setting('app.current_organization'::text, true))::uuid));
-
-
---
--- Name: tenants_organizations; Type: ROW SECURITY; Schema: public; Owner: -
---
-
-ALTER TABLE public.tenants_organizations ENABLE ROW LEVEL SECURITY;
 
 --
 -- PostgreSQL database dump complete

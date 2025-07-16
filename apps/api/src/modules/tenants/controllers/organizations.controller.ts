@@ -1,7 +1,11 @@
 import type { Request, Response } from "express";
 import type { TenantsContext } from "../types";
 
-import { PaginationParamsScheam } from "@lib/modules/pagination/schema";
+import {
+  OrganizationCreateSchema,
+  OrganizationResponseSchema,
+} from "@shared/schemas/organizations";
+import { PaginationParamsScheam } from "@shared/schemas/pagination";
 import { HTTP } from "@/lib/http/status";
 import { paginatedResponse } from "@/lib/modules/pagination/response";
 import { OrganizationService } from "../services/organizations.service";
@@ -20,6 +24,20 @@ function list(context: TenantsContext) {
   };
 }
 
+function post(context: TenantsContext) {
+  return async (req: Request, res: Response) => {
+    const organization = await OrganizationService.create(
+      context.db,
+      OrganizationCreateSchema.parse(req.body),
+    );
+
+    const formattedOrg = OrganizationResponseSchema.parse(organization);
+
+    res.status(HTTP.CREATED).json(formattedOrg);
+  };
+}
+
 export const OrganizationsController = {
   list,
+  post,
 };

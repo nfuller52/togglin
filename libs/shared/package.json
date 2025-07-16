@@ -1,0 +1,10 @@
+{
+  "name": "@togglin/shared",
+  "private": true,
+  "version": "0.0.0",
+  "main": "./src/index.ts",
+  "types": "./dist/index.d.ts",
+  "dependencies": {
+    "zod": "^4.0.5"
+  }
+}

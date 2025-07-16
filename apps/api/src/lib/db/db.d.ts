@@ -12,39 +12,40 @@ export type Generated<T> = T extends ColumnType<infer S, infer I, infer U>
 export type Timestamp = ColumnType<Date, Date | string, Date | string>;
 
 export interface AccountsUser {
-  created_at: Generated<Timestamp>;
+  createdAt: Generated<Timestamp>;
   email: string;
   id: Generated<string>;
   name: string;
-  updated_at: Generated<Timestamp>;
+  updatedAt: Generated<Timestamp>;
 }
 
 export interface TenantsOrganizationMembership {
-  created_at: Generated<Timestamp>;
+  createdAt: Generated<Timestamp>;
   id: Generated<string>;
-  organization_id: string;
-  updated_at: Generated<Timestamp>;
-  user_id: string;
+  organizationId: string;
+  updatedAt: Generated<Timestamp>;
+  userId: string;
 }
 
 export interface TenantsOrganization {
-  created_at: Generated<Timestamp>;
+  createdAt: Generated<Timestamp>;
   id: Generated<string>;
   name: string;
-  updated_at: Generated<Timestamp>;
+  ownerId: string;
+  updatedAt: Generated<Timestamp>;
 }
 
 export interface TenantsProgram {
-  created_at: Generated<Timestamp>;
+  createdAt: Generated<Timestamp>;
   id: Generated<string>;
   name: string;
-  organization_id: string;
-  updated_at: Generated<Timestamp>;
+  organizationId: string;
+  updatedAt: Generated<Timestamp>;
 }
 
 export interface DB {
-  accounts_users: AccountsUser;
-  tenants_organization_memberships: TenantsOrganizationMembership;
-  tenants_organizations: TenantsOrganization;
-  tenants_programs: TenantsProgram;
+  accountsUsers: AccountsUser;
+  tenantsOrganizationMemberships: TenantsOrganizationMembership;
+  tenantsOrganizations: TenantsOrganization;
+  tenantsPrograms: TenantsProgram;
 }

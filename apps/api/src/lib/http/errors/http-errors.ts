@@ -6,12 +6,12 @@ export function isErrorStatus(status: number) {
 
 export class HttpError extends Error {
   public statusCode: number;
-  public details: unknown[];
+  public details: string[];
 
   constructor(
     message: string,
     statusCode = HTTP.INTERNAL_SERVER_ERROR,
-    details: unknown[] = [],
+    details: string[] = [],
   ) {
     super(message);
     this.name = "HttpError";

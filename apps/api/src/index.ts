@@ -3,6 +3,8 @@ import { db } from "@db";
 import { logger } from "@logger";
 import { createServer } from "@/server";
 
+import "@/types/global";
+
 async function main() {
   const server = await createServer();
   const port = app.env.PORT;
