@@ -11,3 +11,9 @@ export function uuidErrorMessages(issue: any) {
     ? __("validations.required")
     : __("validations.invalid_uuid");
 }
+
+export function emailErrorMessages(issue: any) {
+  return issue.input === undefined
+    ? __("validations.required")
+    : __("validations.invalid_email");
+}

@@ -1,8 +1,9 @@
 import type { ErrorRequestHandler } from "express";
 
 import { z, ZodError } from "zod";
+import { UnprocessableEntityError } from "@/lib/http/errors/http-errors";
 import { errorResponseBody } from "@/lib/http/response";
-import { HTTP, HTTP_TEXT } from "@/lib/http/status";
+import { HTTP_TEXT } from "@/lib/http/status";
 
 export const ZodErrorHandler: ErrorRequestHandler = (err, _req, res, next) => {
   if (err instanceof ZodError) {
@@ -13,9 +14,11 @@ export const ZodErrorHandler: ErrorRequestHandler = (err, _req, res, next) => {
       properties: Record<string, { errors: string[] }>;
     };
 
-    res
-      .status(HTTP.BAD_REQUEST)
-      .json(errorResponseBody(HTTP_TEXT.BAD_REQUEST, errors, properties));
+    return next(
+      new UnprocessableEntityError(
+        errorResponseBody(HTTP_TEXT.BAD_REQUEST, errors, properties),
+      ),
+    );
   } else {
     next(err);
   }

@@ -5,6 +5,7 @@
  */
 
 const tempMapping = {
+  "validations.invalid_email": "This field must be a valid email address.",
   "validations.invalid_number": "This field must be a valid number.",
   "validations.invalid_string": "This field must be a valid string.",
   "validations.invalid_uuid": "This field must be a valid v4 uuid.",

@@ -6,5 +6,9 @@ declare global {
     interface Request {
       organizationId?: string;
     }
+
+    interface Response {
+      responseTime?: number;
+    }
   }
 }

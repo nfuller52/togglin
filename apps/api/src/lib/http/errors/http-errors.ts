@@ -1,3 +1,5 @@
+import type { ErrorResponse } from "@/lib/http/response";
+
 import { HTTP, HTTP_TEXT } from "@/lib/http/status";
 
 export function isErrorStatus(status: number) {
@@ -6,17 +8,19 @@ export function isErrorStatus(status: number) {
 
 export class HttpError extends Error {
   public statusCode: number;
-  public details: string[];
+  public body: ErrorResponse;
 
-  constructor(
-    message: string,
+  constructor({
     statusCode = HTTP.INTERNAL_SERVER_ERROR,
-    details: string[] = [],
-  ) {
-    super(message);
+    body = { message: "Internal server error", errors: [], fieldErrors: {} },
+  }: {
+    statusCode: number;
+    body: ErrorResponse;
+  }) {
+    super(body.message);
     this.name = "HttpError";
     this.statusCode = statusCode;
-    this.details = details;
+    this.body = body;
 
     if (Error.captureStackTrace) {
       Error.captureStackTrace(this, HttpError);
@@ -25,25 +29,61 @@ export class HttpError extends Error {
 }
 
 export class UnauthorizedError extends HttpError {
-  constructor(message: string = HTTP_TEXT.UNAUTHORIZED) {
-    super(message, HTTP.UNAUTHORIZED);
+  constructor(
+    body: ErrorResponse = {
+      message: HTTP_TEXT.UNAUTHORIZED,
+      errors: [],
+      fieldErrors: {},
+    },
+  ) {
+    super({ statusCode: HTTP.UNAUTHORIZED, body });
   }
 }
 
 export class ForbiddenError extends HttpError {
-  constructor(message: string = HTTP_TEXT.FORBIDDEN) {
-    super(message, HTTP.FORBIDDEN);
+  constructor(
+    body: ErrorResponse = {
+      message: HTTP_TEXT.FORBIDDEN,
+      errors: [],
+      fieldErrors: {},
+    },
+  ) {
+    super({ statusCode: HTTP.FORBIDDEN, body });
   }
 }
 
 export class BadRequestError extends HttpError {
-  constructor(message: string = HTTP_TEXT.BAD_REQUEST) {
-    super(message, HTTP.BAD_REQUEST);
+  constructor(
+    body: ErrorResponse = {
+      message: HTTP_TEXT.BAD_REQUEST,
+      errors: [],
+      fieldErrors: {},
+    },
+  ) {
+    super({ statusCode: HTTP.BAD_REQUEST, body });
+  }
+}
+
+export class UnprocessableEntityError extends HttpError {
+  constructor(
+    body: ErrorResponse = {
+      message: HTTP_TEXT.UNPROCESSABLE_ENTITY,
+      errors: [],
+      fieldErrors: {},
+    },
+  ) {
+    super({ statusCode: HTTP.UNPROCESSABLE_ENTITY, body });
   }
 }
 
 export class NotFoundError extends HttpError {
-  constructor(message: string = HTTP_TEXT.NOT_FOUND) {
-    super(message, HTTP.NOT_FOUND);
+  constructor(
+    body: ErrorResponse = {
+      message: HTTP_TEXT.NOT_FOUND,
+      errors: ["The requested resource was not found."],
+      fieldErrors: {},
+    },
+  ) {
+    super({ statusCode: HTTP.NOT_FOUND, body });
   }
 }

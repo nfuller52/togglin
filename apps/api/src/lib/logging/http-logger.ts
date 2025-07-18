@@ -4,8 +4,16 @@ import { nanoid } from "nanoid";
 import { pinoHttp } from "pino-http";
 import { logger } from "./logger";
 
-const customMessage = (req: Request, res: Response) => {
-  return `[${res.statusCode}] ${req.method} ${req.originalUrl}`;
+const customMessage = (
+  req: Request,
+  res: Response,
+  timeOrError: number | Error,
+) => {
+  let output = `[${res.statusCode}] ${req.method} ${req.originalUrl}`;
+
+  if (timeOrError instanceof Error) return output;
+
+  return `${output} (${timeOrError}ms)`;
 };
 
 export const httpLogger = pinoHttp({
