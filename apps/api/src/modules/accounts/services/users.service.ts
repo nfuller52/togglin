@@ -1,26 +1,17 @@
 import type { ServiceDataSource } from "@/lib/db/types";
-import type { InferServiceResult } from "@/lib/modules/types";
 import type { UserCreateParams } from "@shared/schemas/users";
 
+import { Service } from "@/lib/modules/service";
 import { UsersQueries } from "../queries/users.queries";
 
-type CreateUserErrors = "EMAIL_TAKEN" | "CREATE_FAILED";
-type CreateServiceResponse = InferServiceResult<
-  typeof UsersQueries.createUser,
-  CreateUserErrors
->;
-
-async function create(
-  db: ServiceDataSource,
-  orgParams: UserCreateParams,
-): CreateServiceResponse {
+async function create(db: ServiceDataSource, orgParams: UserCreateParams) {
   const userExists = await UsersQueries.getByEmail(db, orgParams.email);
-  if (userExists) return { ok: false, error: "EMAIL_TAKEN", data: null };
+  if (userExists) return Service.error("EMAIL_TAKEN");
 
   const user = await UsersQueries.createUser(db, orgParams);
-  if (!user) return { ok: false, error: "CREATE_FAILED", data: null };
+  if (!user) return Service.error("CREATE_FAILED");
 
-  return { ok: true, error: null, data: user };
+  return Service.success(user);
 }
 
 export const UsersService = { create };
