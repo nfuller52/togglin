@@ -19,12 +19,6 @@ const dialect = new PostgresDialect({
   pool: {
     connect: async () => {
       const client = await pgPool.connect();
-
-      await client.query(
-        "SELECT set_config('app.current_organization', $1, FALSE);",
-        ["8cb49307-2da4-41fc-a090-e39650e50a02"], // should be imported from request context?
-      );
-
       return client;
     },
     end: async () => pgPool.end(),

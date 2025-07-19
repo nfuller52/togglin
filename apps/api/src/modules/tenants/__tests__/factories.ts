@@ -1,21 +1,45 @@
 import type { DB } from "@/lib/db/db";
-import type { Kysely } from "kysely";
+import type { Insertable, Kysely } from "kysely";
 
 import { faker } from "@faker-js/faker";
 import { TENANTS_ORGANIZATIONS_TABLE } from "../constants";
 
-export function organizationFactory(overrides: Partial<DB> = {}) {
+export function organizationFactory(
+  overrides: Partial<Insertable<DB["tenantsOrganizations"]>> = {},
+): Insertable<DB["tenantsOrganizations"]> {
+  if (!overrides.ownerId) {
+    throw new Error(
+      "REQUIRED ASSOCIATION: organizationFactory requires an `ownerId` (user)",
+    );
+  }
+
   return {
-    id: faker.string.uuid(),
     name: faker.company.name(),
+    ownerId: faker.string.uuid(), // ! this will fail to insert without a real association
     ...overrides,
   };
 }
 
 export async function createOrganization(db: Kysely<DB>, overrides = {}) {
-  const org = organizationFactory(overrides);
+  const orgAttrs = organizationFactory(overrides);
 
-  await db.insertInto(TENANTS_ORGANIZATIONS_TABLE).values(org).execute();
+  return await db
+    .insertInto(TENANTS_ORGANIZATIONS_TABLE)
+    .values(orgAttrs)
+    .returningAll()
+    .executeTakeFirst();
+}
 
-  return org;
+export async function createOrganizations(
+  db: Kysely<DB>,
+  count: number,
+  overrides = {},
+) {
+  const queries = [];
+
+  for (let index = 0; index < count; index++) {
+    queries.push(createOrganization(db, overrides));
+  }
+
+  return Promise.all(queries);
 }
