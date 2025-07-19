@@ -23,11 +23,17 @@ export function organizationFactory(
 export async function createOrganization(db: Kysely<DB>, overrides = {}) {
   const orgAttrs = organizationFactory(overrides);
 
-  return await db
+  const org = await db
     .insertInto(TENANTS_ORGANIZATIONS_TABLE)
     .values(orgAttrs)
     .returningAll()
     .executeTakeFirst();
+
+  if (!org) {
+    throw new Error("failed");
+  }
+
+  return org;
 }
 
 export async function createOrganizations(

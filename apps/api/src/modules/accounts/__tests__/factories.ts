@@ -22,9 +22,15 @@ export async function createUser(db: Kysely<DB>, overrides = {}) {
 
   const userAttrs = userFactory(overrides);
 
-  return db
+  const user = await db
     .insertInto(ACCOUNTS_USERS_TABLE)
     .values(userAttrs)
     .returningAll()
     .executeTakeFirst();
+
+  if (!user) {
+    throw new Error("Failed to insert user");
+  }
+
+  return user;
 }

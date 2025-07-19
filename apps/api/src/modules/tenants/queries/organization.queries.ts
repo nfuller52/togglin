@@ -21,7 +21,7 @@ async function list(
 async function count(db: Kysely<DB>) {
   return db
     .selectFrom(TENANTS_ORGANIZATIONS_TABLE)
-    .select(({ fn }) => [fn.countAll().as("count")])
+    .select(({ fn }) => [fn.countAll<number>().as("count")])
     .executeTakeFirst();
 }
 

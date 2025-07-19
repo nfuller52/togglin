@@ -4,7 +4,7 @@ import type { DB } from "./db";
 import { app } from "@app";
 import { logger } from "@logger";
 import { CamelCasePlugin, Kysely, PostgresDialect } from "kysely";
-import { Pool } from "pg";
+import { Pool, types } from "pg";
 
 const pgPool = new Pool({
   database: app.env.DATABASE_NAME,
@@ -14,6 +14,15 @@ const pgPool = new Pool({
   password: app.env.DATABASE_PASSWORD,
   max: app.env.DATABASE_POOL_MAX,
 });
+
+/**
+ * * Cast return integer types to JS Number
+ *   Note: PG can return values larger than a Number can handle,
+ *         but this should be OK for an INT8
+ *
+ *   https://github.com/kysely-org/kysely/issues/749#issuecomment-2028835365
+ */
+types.setTypeParser(types.builtins.INT8, (val) => Number(val));
 
 const dialect = new PostgresDialect({
   pool: {
