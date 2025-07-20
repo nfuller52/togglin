@@ -1,6 +1,7 @@
 import type { ServiceDataSource } from "@/lib/db/types";
 
 import { OrganizationService } from "@modules/tenants/services/organizations.service";
+import { OrganizationCreateParams } from "@shared/schemas/organizations";
 import { Factory } from "@tests/factories";
 
 describe("OrganizationService", () => {
@@ -63,11 +64,22 @@ describe("OrganizationService", () => {
       expect(result.data!.name).toBe("Test Org");
     });
 
-    it("returns CREATE_FAILED when creation fails", async () => {
-      const result = await OrganizationService.create({} as ServiceDataSource, {
+    it("returns USER_NOT_FOUND when requesting user does not exist", async () => {
+      const result = await OrganizationService.create(db, {
         name: "Test Org",
         ownerId: "invalid",
       });
+
+      expect(result.ok).toBe(false);
+      expect(result.error).toBe("USER_NOT_FOUND");
+    });
+
+    it("returns CREATE_FAILED when creation fails", async () => {
+      const user = await Factory.createUser(db);
+      const result = await OrganizationService.create(db, {
+        name: null,
+        ownerId: user.id,
+      } as unknown as OrganizationCreateParams); // gotta hack this to raise the error
 
       expect(result.ok).toBe(false);
       expect(result.error).toBe("CREATE_FAILED");

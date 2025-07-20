@@ -5,7 +5,6 @@ import { UsersService } from "./services/users.service";
 
 export interface IAccountsModule {
   initAccountsModule: (app: Express, context: AppContext) => void;
-  UsersService: typeof UsersService;
 }
 
 export interface AccountsContext extends AppContext {

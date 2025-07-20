@@ -9,6 +9,7 @@ import { PaginationParamsScheam } from "@shared/schemas/pagination";
 import {
   BadRequestError,
   InternalServerError,
+  NotFoundError,
 } from "@/lib/http/errors/http-errors";
 import { HTTP } from "@/lib/http/status";
 import { paginatedResponse } from "@/lib/modules/pagination/response";
@@ -35,6 +36,7 @@ function post(context: TenantsContext) {
     const params = OrganizationCreateSchema.parse(req.body);
     const result = await OrganizationService.create(context.db, params);
 
+    if (result.error === "USER_NOT_FOUND") throw new NotFoundError("user");
     if (!result.ok) throw new BadRequestError();
 
     const formatted = OrganizationResponseSchema.parse(result.data);

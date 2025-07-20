@@ -2,6 +2,7 @@ import type { ServiceDataSource } from "@/lib/db/types";
 import type { OrganizationCreateParams } from "@shared/schemas/organizations";
 import type { PaginationParams } from "@shared/schemas/pagination";
 
+import { UsersService } from "@modules/accounts";
 import { Service } from "@/lib/modules/service";
 import { tryCatch } from "@/utils/try-catch";
 import { TenantsQueries } from "../tenants.queries";
@@ -38,6 +39,11 @@ async function create(
   db: ServiceDataSource,
   orgParams: OrganizationCreateParams,
 ) {
+  const result = await UsersService.get(db, orgParams.ownerId);
+  if (!result.ok || result.error === "USER_NOT_FOUND") {
+    return Service.error("USER_NOT_FOUND");
+  }
+
   const { data: org, error } = await tryCatch(
     TenantsQueries.createOrganization(db, orgParams),
   );

@@ -89,13 +89,13 @@ export class UnprocessableEntityError extends HttpError {
 }
 
 export class NotFoundError extends HttpError {
-  constructor(
-    body: ErrorResponse = {
+  constructor(resource?: string) {
+    const body = {
       message: HTTP_TEXT.NOT_FOUND,
-      errors: ["The requested resource was not found."],
+      errors: [`The requested ${resource ?? "resource"} was not found.`],
       fieldErrors: {},
-    },
-  ) {
+    };
+
     super({ statusCode: HTTP.NOT_FOUND, body });
   }
 }

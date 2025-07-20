@@ -14,6 +14,11 @@ export const ZodErrorHandler: ErrorRequestHandler = (err, _req, res, next) => {
       properties: Record<string, { errors: string[] }>;
     };
 
+    // Re-format Zod js/response
+    if (errors[0] === "Invalid input: expected object, received undefined") {
+      errors[0] = "Invalid or missing input";
+    }
+
     return next(
       new UnprocessableEntityError(
         errorResponseBody(HTTP_TEXT.BAD_REQUEST, errors, properties),
