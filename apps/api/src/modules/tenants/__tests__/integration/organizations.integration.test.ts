@@ -1,7 +1,7 @@
 import type { Express } from "express";
 
+import { Factory } from "@tests/factories";
 import request from "supertest";
-import { Factory } from "tests/factories";
 import { createApp } from "@/app";
 
 let app: Express;
@@ -21,6 +21,6 @@ describe("GET /organizations", () => {
       .expect(200);
 
     expect(res.body.data).toHaveLength(5);
-    expect(res.body.total).toBe(7);
+    expect(res.body.total).toBe(10);
   });
 });

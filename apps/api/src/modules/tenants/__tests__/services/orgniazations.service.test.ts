@@ -1,7 +1,7 @@
 import type { ServiceDataSource } from "@/lib/db/types";
 
 import { OrganizationService } from "@modules/tenants/services/organizations.service";
-import { Factory } from "tests/factories";
+import { Factory } from "@tests/factories";
 
 describe("OrganizationService", () => {
   describe("list", () => {

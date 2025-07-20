@@ -21,6 +21,7 @@
       "@logger": ["src/lib/logging/index.ts"],
       "@modules/*": ["src/modules/*"],
       "@shared/*": ["../../libs/shared/src/*"],
+      "@tests/*": ["tests/*"],
       "@utils/*": ["src/utils/*"]
     }
   },

@@ -1,5 +1,5 @@
 import { OrganizationQueries } from "@modules/tenants/queries/organization.queries";
-import { Factory } from "tests/factories";
+import { Factory } from "@tests/factories";
 
 describe("OrganizationQueries", () => {
   describe("list", () => {

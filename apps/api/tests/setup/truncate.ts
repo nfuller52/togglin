@@ -2,19 +2,17 @@ import type { DB } from "@/lib/db/db";
 import type { ControlledTransaction, Kysely } from "kysely";
 
 import { db as primaryDb } from "@db";
+import { truncateAll } from "../utils/reset-db";
 
-// chat GPT saved me on this lil trick! very nice setup
 declare global {
   var db: ControlledTransaction<DB> | Kysely<DB>;
 }
 
-let _db: ControlledTransaction<DB>;
-
 beforeEach(async () => {
-  _db = await primaryDb.startTransaction().execute();
-  globalThis.db = _db;
+  globalThis.db = primaryDb;
+  await truncateAll();
 });
 
 afterEach(async () => {
-  await _db.rollback().execute();
+  await truncateAll();
 });
