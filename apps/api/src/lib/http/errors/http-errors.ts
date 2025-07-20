@@ -28,6 +28,18 @@ export class HttpError extends Error {
   }
 }
 
+export class InternalServerError extends HttpError {
+  constructor(
+    body: ErrorResponse = {
+      message: HTTP_TEXT.INTERNAL_SERVER_ERROR,
+      errors: [],
+      fieldErrors: {},
+    },
+  ) {
+    super({ statusCode: HTTP.INTERNAL_SERVER_ERROR, body });
+  }
+}
+
 export class UnauthorizedError extends HttpError {
   constructor(
     body: ErrorResponse = {

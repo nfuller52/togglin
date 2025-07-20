@@ -3,22 +3,33 @@ import type { OrganizationCreateParams } from "@shared/schemas/organizations";
 import type { PaginationParams } from "@shared/schemas/pagination";
 
 import { Service } from "@/lib/modules/service";
+import { tryCatch } from "@/utils/try-catch";
 import { TenantsQueries } from "../tenants.queries";
 
 async function list(db: ServiceDataSource, paginationParams: PaginationParams) {
-  const [data, countResult] = await Promise.all([
-    TenantsQueries.listOrganizations(db, paginationParams),
-    TenantsQueries.countOrganizations(db),
-  ]);
+  const { data, error } = await tryCatch(
+    Promise.all([
+      TenantsQueries.listOrganizations(db, paginationParams),
+      TenantsQueries.countOrganizations(db),
+    ]),
+  );
 
-  const total = countResult?.count ?? 0;
+  if (error || !data) return Service.error("DB_ERROR");
 
-  return Service.success({ data, total: parseInt(total.toString()) });
+  const [queryResult, countResult] = data;
+
+  return Service.success({
+    data: queryResult,
+    total: (countResult?.count as number) ?? 0,
+  });
 }
 
 async function get(db: ServiceDataSource, id: string) {
-  const org = await TenantsQueries.getOrganization(db, id);
-  if (!org) return Service.error("NOT_FOUND");
+  const { data: org, error } = await tryCatch(
+    TenantsQueries.getOrganization(db, id),
+  );
+
+  if (error || !org) return Service.error("NOT_FOUND");
 
   return Service.success(org);
 }
@@ -27,8 +38,11 @@ async function create(
   db: ServiceDataSource,
   orgParams: OrganizationCreateParams,
 ) {
-  const org = await TenantsQueries.createOrganization(db, orgParams);
-  if (!org) return Service.error("CREATE_FAILED");
+  const { data: org, error } = await tryCatch(
+    TenantsQueries.createOrganization(db, orgParams),
+  );
+
+  if (error || !org) return Service.error("CREATE_FAILED");
 
   return Service.success(org);
 }

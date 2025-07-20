@@ -4,6 +4,11 @@ import { app } from "@/configs/app";
 export const logger = pino({
   name: "api",
   level: app.env.LOG_LEVEL,
+  formatters: {
+    level(label) {
+      return { level: label };
+    },
+  },
   transport:
     app.env.NODE_ENV === "local"
       ? {

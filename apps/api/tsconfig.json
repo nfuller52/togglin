@@ -20,7 +20,8 @@
       "@lib/*": ["src/lib/*"],
       "@logger": ["src/lib/logging/index.ts"],
       "@modules/*": ["src/modules/*"],
-      "@shared/*": ["../../libs/shared/src/*"]
+      "@shared/*": ["../../libs/shared/src/*"],
+      "@utils/*": ["src/utils/*"]
     }
   },
   "include": ["scripts", "src", "tests", "vitest.config.ts", "vitest.setup.ts"],

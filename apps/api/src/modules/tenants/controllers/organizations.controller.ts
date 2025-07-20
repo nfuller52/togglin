@@ -6,6 +6,10 @@ import {
   OrganizationResponseSchema,
 } from "@shared/schemas/organizations";
 import { PaginationParamsScheam } from "@shared/schemas/pagination";
+import {
+  BadRequestError,
+  InternalServerError,
+} from "@/lib/http/errors/http-errors";
 import { HTTP } from "@/lib/http/status";
 import { paginatedResponse } from "@/lib/modules/pagination/response";
 import { OrganizationService } from "../services/organizations.service";
@@ -13,27 +17,29 @@ import { OrganizationService } from "../services/organizations.service";
 function list(context: TenantsContext) {
   return async (req: Request, res: Response) => {
     const pagination = PaginationParamsScheam.parse(req.query);
+    const result = await OrganizationService.list(context.db, pagination);
 
-    const { data, total } = await OrganizationService.list(
-      context.db,
-      pagination,
-    );
-    const result = paginatedResponse({ data, total, ...pagination });
+    if (!result.ok) throw new InternalServerError();
 
-    res.status(HTTP.OK).json(result);
+    const payload = paginatedResponse({
+      ...result.data,
+      ...pagination,
+    });
+
+    res.status(HTTP.OK).json(payload);
   };
 }
 
 function post(context: TenantsContext) {
   return async (req: Request, res: Response) => {
-    const organization = await OrganizationService.create(
-      context.db,
-      OrganizationCreateSchema.parse(req.body),
-    );
+    const params = OrganizationCreateSchema.parse(req.body);
+    const result = await OrganizationService.create(context.db, params);
 
-    const formattedOrg = OrganizationResponseSchema.parse(organization);
+    if (!result.ok) throw new BadRequestError();
 
-    res.status(HTTP.CREATED).json(formattedOrg);
+    const formatted = OrganizationResponseSchema.parse(result.data);
+
+    res.status(HTTP.CREATED).json(formatted);
   };
 }
 

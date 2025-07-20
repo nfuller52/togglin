@@ -18,6 +18,8 @@ export default defineConfig({
       "@lib": path.resolve(__dirname, "src/lib"),
       "@logger": path.resolve(__dirname, "src/lib/logging/index.ts"),
       "@modules": path.resolve(__dirname, "src/modules"),
+      "@shared": path.resolve(__dirname, "../../libs/shared/src"),
+      "@utils": path.resolve(__dirname, "src/utils"),
     },
   },
 });
