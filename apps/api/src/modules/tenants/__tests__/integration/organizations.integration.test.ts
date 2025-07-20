@@ -1,14 +1,5 @@
-import type { Express } from "express";
-
 import { Factory } from "@tests/factories";
 import request from "supertest";
-import { createApp } from "@/app";
-
-let app: Express;
-
-beforeAll(async () => {
-  app = await createApp();
-});
 
 describe("GET /organizations", () => {
   it("returns paginated orgs", async () => {

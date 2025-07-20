@@ -27,8 +27,11 @@ export default defineConfig({
         test: {
           name: "unit",
           include: ["tests/**/*.test.ts", "src/**/*.test.ts"],
-          exclude: ["src/**/integration/*.test.ts"],
-          setupFiles: ["tests/setup/transaction.ts"],
+          exclude: [
+            "src/**/integration/*.test.ts",
+            "src/**/*.integration.test.ts",
+          ],
+          setupFiles: ["tests/setup/unit-tests.ts"],
         },
       },
       {
@@ -36,8 +39,11 @@ export default defineConfig({
         extends: true,
         test: {
           name: "integration",
-          include: ["src/**/integration/*.test.ts"],
-          setupFiles: ["tests/setup/truncate.ts"],
+          include: [
+            "src/**/integration/*.test.ts",
+            "src/**/*.integration.test.ts",
+          ],
+          setupFiles: ["tests/setup/integration-tests.ts"],
         },
       },
     ],

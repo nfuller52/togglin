@@ -38,12 +38,12 @@ describe("OrganizationQueries", () => {
     });
   });
 
-  describe("count", () => {
+  describe("countAll", () => {
     it("returns the total number of organizations", async () => {
       const user = await Factory.createUser(db);
       await Factory.createOrganizations(db, 7, { ownerId: user.id });
 
-      const countResult = await OrganizationQueries.count(db);
+      const countResult = await OrganizationQueries.countAll(db);
 
       expect(countResult?.count).toEqual(7);
     });

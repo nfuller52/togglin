@@ -5,7 +5,6 @@ import { OrganizationService } from "./services/organizations.service";
 
 export interface ITenantsModule {
   initTenantsModule: (app: Express, context: AppContext) => void;
-  OrganizationService: typeof OrganizationService;
 }
 
 export interface TenantsContext extends AppContext {

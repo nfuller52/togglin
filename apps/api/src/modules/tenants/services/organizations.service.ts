@@ -5,13 +5,13 @@ import type { PaginationParams } from "@shared/schemas/pagination";
 import { UsersService } from "@modules/accounts";
 import { Service } from "@/lib/modules/service";
 import { tryCatch } from "@/utils/try-catch";
-import { TenantsQueries } from "../tenants.queries";
+import { OrganizationQueries } from "../queries/organizations.queries";
 
 async function list(db: ServiceDataSource, paginationParams: PaginationParams) {
   const { data, error } = await tryCatch(
     Promise.all([
-      TenantsQueries.listOrganizations(db, paginationParams),
-      TenantsQueries.countOrganizations(db),
+      OrganizationQueries.list(db, paginationParams),
+      OrganizationQueries.countAll(db),
     ]),
   );
 
@@ -26,10 +26,7 @@ async function list(db: ServiceDataSource, paginationParams: PaginationParams) {
 }
 
 async function get(db: ServiceDataSource, id: string) {
-  const { data: org, error } = await tryCatch(
-    TenantsQueries.getOrganization(db, id),
-  );
-
+  const { data: org, error } = await tryCatch(OrganizationQueries.get(db, id));
   if (error || !org) return Service.error("NOT_FOUND");
 
   return Service.success(org);
@@ -45,7 +42,7 @@ async function create(
   }
 
   const { data: org, error } = await tryCatch(
-    TenantsQueries.createOrganization(db, orgParams),
+    OrganizationQueries.insert(db, orgParams),
   );
 
   if (error || !org) return Service.error("CREATE_FAILED");

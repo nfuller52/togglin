@@ -2,6 +2,7 @@ import type { DB } from "@/lib/db/db";
 import type { PaginationParams } from "@shared/schemas/pagination";
 import type { Kysely } from "kysely";
 
+import { OrganizationCreateParams } from "@shared/schemas/organizations";
 import { TENANTS_ORGANIZATIONS_TABLE } from "../constants";
 
 async function list(
@@ -18,7 +19,7 @@ async function list(
     .execute();
 }
 
-async function count(db: Kysely<DB>) {
+async function countAll(db: Kysely<DB>) {
   return db
     .selectFrom(TENANTS_ORGANIZATIONS_TABLE)
     .select(({ fn }) => [fn.countAll<number>().as("count")])
@@ -33,8 +34,17 @@ async function get(db: Kysely<DB>, id: string) {
     .executeTakeFirst();
 }
 
+async function insert(db: Kysely<DB>, orgParams: OrganizationCreateParams) {
+  return db
+    .insertInto(TENANTS_ORGANIZATIONS_TABLE)
+    .values(orgParams)
+    .returningAll()
+    .executeTakeFirst();
+}
+
 export const OrganizationQueries = {
   list,
-  count,
+  countAll,
   get,
+  insert,
 };
