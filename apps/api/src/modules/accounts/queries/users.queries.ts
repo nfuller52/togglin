@@ -15,7 +15,7 @@ async function getById(db: Kysely<DB>, id: string) {
 async function getByEmail(db: Kysely<DB>, email: string) {
   return db
     .selectFrom(ACCOUNTS_USERS_TABLE)
-    .select(["accountsUsers.id", "accountsUsers.email"])
+    .selectAll()
     .where("email", "=", email)
     .executeTakeFirst();
 }

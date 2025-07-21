@@ -4,6 +4,7 @@ import { app as appConfig } from "@app";
 import { db } from "@db";
 import { httpLogger, logger } from "@logger";
 import { AccountsModule } from "@modules/accounts";
+import { AuthModule } from "@modules/auth";
 import { TenantsModule } from "@modules/tenants";
 import express from "express";
 import { NotFoundError } from "@/lib/http/errors/http-errors";
@@ -26,8 +27,9 @@ export async function createApp() {
   app.use(OrgIdMiddleware);
 
   // Routes
-  TenantsModule.initTenantsModule(app, appContext);
   AccountsModule.initAccountsModule(app, appContext);
+  AuthModule.initAuthModule(app, appContext);
+  TenantsModule.initTenantsModule(app, appContext);
 
   // Catch-all Route 404 Handler
   app.use((_req, _res, next) => next(new NotFoundError()));

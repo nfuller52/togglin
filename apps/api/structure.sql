@@ -58,7 +58,21 @@ CREATE TABLE public.accounts_users (
     created_at timestamp with time zone DEFAULT now() NOT NULL,
     updated_at timestamp with time zone DEFAULT now() NOT NULL,
     name text NOT NULL,
-    email public.citext NOT NULL
+    email public.citext NOT NULL,
+    auth_user_id uuid NOT NULL
+);
+
+
+--
+-- Name: auth_users; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.auth_users (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    updated_at timestamp with time zone DEFAULT now() NOT NULL,
+    email public.citext NOT NULL,
+    password_hash text NOT NULL
 );
 
 
@@ -130,6 +144,14 @@ ALTER TABLE ONLY public.accounts_users
 
 
 --
+-- Name: auth_users auth_users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.auth_users
+    ADD CONSTRAINT auth_users_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: kysely_migration_lock kysely_migration_lock_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -185,10 +207,25 @@ CREATE UNIQUE INDEX accounts_users_email ON public.accounts_users USING btree (e
 
 
 --
+-- Name: auth_users_email; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX auth_users_email ON public.auth_users USING btree (email);
+
+
+--
 -- Name: tenants_organization_memberships_uniq_membership; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX tenants_organization_memberships_uniq_membership ON public.tenants_organization_memberships USING btree (user_id, organization_id);
+
+
+--
+-- Name: accounts_users accounts_users_auth_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.accounts_users
+    ADD CONSTRAINT accounts_users_auth_user_id_fkey FOREIGN KEY (auth_user_id) REFERENCES public.accounts_users(id) ON DELETE CASCADE;
 
 
 --

@@ -42,6 +42,7 @@
     "tsx": "^4.20.3"
   },
   "dependencies": {
+    "argon2": "^0.43.1",
     "cors": "^2.8.5",
     "express": "^5.1.0",
     "kysely": "^0.28.2",

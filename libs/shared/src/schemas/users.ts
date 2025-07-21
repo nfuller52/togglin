@@ -2,11 +2,13 @@ import * as z from "zod";
 import {
   emailErrorMessages,
   stringErrorMessages,
+  uuidErrorMessages,
 } from "../utils/schema-errors";
 
 export const UserCreateSchema = z.object({
   name: z.string({ error: stringErrorMessages }),
   email: z.email({ error: emailErrorMessages }),
+  authUserId: z.uuid({ error: uuidErrorMessages }),
 });
 
 export const UserUpdateSchema = z.object({
