@@ -3,7 +3,7 @@ import type { ServiceDataSource } from "@/lib/db/types";
 import { RegistrationCreateParams } from "@shared/schemas/registrations";
 import { Service } from "@/lib/modules/service";
 import { UsersService } from "@/modules/accounts";
-import { AuthUsersQueries } from "../queries/auth-user.queries";
+import { AuthUsersQueries } from "../queries/auth-users.queries";
 import { PasswordHasherService } from "./password-hasher.service";
 
 async function create(db: ServiceDataSource, params: RegistrationCreateParams) {
