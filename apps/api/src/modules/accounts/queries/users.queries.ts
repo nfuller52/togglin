@@ -20,10 +20,10 @@ async function getByEmail(db: Kysely<DB>, email: string) {
     .executeTakeFirst();
 }
 
-async function createUser(db: Kysely<DB>, userParams: UserCreateParams) {
+async function createUser(db: Kysely<DB>, params: UserCreateParams) {
   return db
     .insertInto(ACCOUNTS_USERS_TABLE)
-    .values(userParams)
+    .values(params)
     .returningAll()
     .executeTakeFirst();
 }

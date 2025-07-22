@@ -31,4 +31,5 @@ async function create(db: ServiceDataSource, params: RegistrationCreateParams) {
 
   return Service.success(authUser);
 }
+
 export const RegistrationsService = { create };

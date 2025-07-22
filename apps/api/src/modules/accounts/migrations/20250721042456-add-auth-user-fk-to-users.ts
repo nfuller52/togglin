@@ -8,7 +8,7 @@ export async function up(db: Kysely<unknown>): Promise<void> {
   await db.schema
     .alterTable(TABLE_NAME)
     .addColumn("auth_user_id", "uuid", (col) =>
-      col.references("accounts_users.id").onDelete("cascade").notNull(),
+      col.references("auth_users.id").onDelete("cascade").notNull(),
     )
     .execute();
 }

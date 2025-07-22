@@ -20,6 +20,9 @@ const EnvSchema = z.object({
   DATABASE_POOL_MAX: z.coerce.number(),
   DATABASE_MIGRATION_USER: z.string(),
   DATABASE_MIGRATION_PASSWORD: z.string(),
+
+  // Test Setup (Ignore in !test environment)
+  DEFAULT_TEST_USER_PASSWORD: z.string().default("This2222!"),
 });
 
 export function loadEnvironment() {

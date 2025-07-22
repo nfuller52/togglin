@@ -225,7 +225,7 @@ CREATE UNIQUE INDEX tenants_organization_memberships_uniq_membership ON public.t
 --
 
 ALTER TABLE ONLY public.accounts_users
-    ADD CONSTRAINT accounts_users_auth_user_id_fkey FOREIGN KEY (auth_user_id) REFERENCES public.accounts_users(id) ON DELETE CASCADE;
+    ADD CONSTRAINT accounts_users_auth_user_id_fkey FOREIGN KEY (auth_user_id) REFERENCES public.auth_users(id) ON DELETE CASCADE;
 
 
 --

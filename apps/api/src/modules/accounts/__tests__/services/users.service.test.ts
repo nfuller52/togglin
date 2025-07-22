@@ -4,7 +4,8 @@ import { Factory } from "@tests/factories";
 describe("UsersService", () => {
   describe(".find", () => {
     it("searches by id when present", async () => {
-      const user = await Factory.createUser(db);
+      const authUser = await Factory.createAuthUser(db);
+      const user = await Factory.createUser(db, { authUserId: authUser.id });
       const result = await UsersService.find(db, { id: user.id });
 
       expect(result.ok).toBeTruthy();
@@ -13,7 +14,8 @@ describe("UsersService", () => {
     });
 
     it("searches by email when present", async () => {
-      const user = await Factory.createUser(db);
+      const authUser = await Factory.createAuthUser(db);
+      const user = await Factory.createUser(db, { authUserId: authUser.id });
       const result = await UsersService.find(db, { email: user.email });
 
       expect(result.ok).toBeTruthy();

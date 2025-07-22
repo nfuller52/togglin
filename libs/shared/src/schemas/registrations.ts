@@ -11,8 +11,10 @@ export const RegistrationCreateSchema = UserCreateSchema.extend({
     message: __("validations.password.mismatch"),
     path: ["passwordConfirmation"],
   })
-  .omit({ authUserId: true }); // ! note: removal of the FK;
+  .omit({ authUserId: true });
 
-export const RegistrationResponseSchema = UserResponseSchema;
+export const RegistrationResponseSchema = UserResponseSchema.omit({
+  name: true,
+});
 
 export type RegistrationCreateParams = z.infer<typeof RegistrationCreateSchema>;

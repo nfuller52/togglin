@@ -17,11 +17,10 @@ async function get(db: ServiceDataSource, id: string) {
   return Service.success(data);
 }
 
-async function create(db: ServiceDataSource, orgParams: UserCreateParams) {
-  const userExists = await UsersQueries.getByEmail(db, orgParams.email);
+async function create(db: ServiceDataSource, params: UserCreateParams) {
+  const userExists = await UsersQueries.getByEmail(db, params.email);
   if (userExists) return Service.error("EMAIL_TAKEN");
-
-  const user = await UsersQueries.createUser(db, orgParams);
+  const user = await UsersQueries.createUser(db, params);
   if (!user) return Service.error("CREATE_FAILED");
 
   return Service.success(user);
@@ -42,7 +41,7 @@ async function find(db: ServiceDataSource, params: UserFindParams) {
     result = query;
   }
 
-  if (!result) return Service.error("USER_NOT_FOUND");
+  if (!result?.data) return Service.error("USER_NOT_FOUND");
 
   return Service.success(result.data);
 }
