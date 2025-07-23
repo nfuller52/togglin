@@ -7,15 +7,15 @@ import { TENANTS_ORGANIZATIONS_TABLE } from "../constants";
 export function organizationFactory(
   overrides: Partial<Insertable<DB["tenantsOrganizations"]>> = {},
 ): Insertable<DB["tenantsOrganizations"]> {
-  if (!overrides.ownerId) {
+  if (!overrides.createdById) {
     throw new Error(
-      "REQUIRED ASSOCIATION: organizationFactory requires an `ownerId` (user)",
+      "REQUIRED ASSOCIATION: organizationFactory requires an `createdById` (user)",
     );
   }
 
   return {
     name: faker.company.name(),
-    ownerId: faker.string.uuid(), // ! this will fail to insert without a real association
+    createdById: faker.string.uuid(), // ! this will fail to insert without a real association
     ...overrides,
   };
 }

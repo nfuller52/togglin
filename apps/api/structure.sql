@@ -45,6 +45,17 @@ CREATE EXTENSION IF NOT EXISTS pgcrypto WITH SCHEMA public;
 COMMENT ON EXTENSION pgcrypto IS 'cryptographic functions';
 
 
+--
+-- Name: auth_refresh_token_status; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public.auth_refresh_token_status AS ENUM (
+    'rotation',
+    'logout',
+    'compromise'
+);
+
+
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
@@ -60,6 +71,23 @@ CREATE TABLE public.accounts_users (
     name text NOT NULL,
     email public.citext NOT NULL,
     auth_user_id uuid NOT NULL
+);
+
+
+--
+-- Name: auth_oauth_refresh_tokens; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.auth_oauth_refresh_tokens (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    updated_at timestamp with time zone DEFAULT now() NOT NULL,
+    expires_at timestamp with time zone DEFAULT now() NOT NULL,
+    short_id character varying(21) NOT NULL,
+    auth_user_id uuid NOT NULL,
+    revoked_at timestamp with time zone,
+    revoked_reason public.auth_refresh_token_status,
+    replaced_by_token_id uuid
 );
 
 
@@ -118,7 +146,7 @@ CREATE TABLE public.tenants_organizations (
     created_at timestamp with time zone DEFAULT now() NOT NULL,
     updated_at timestamp with time zone DEFAULT now() NOT NULL,
     name text NOT NULL,
-    owner_id uuid NOT NULL
+    created_by_id uuid NOT NULL
 );
 
 
@@ -141,6 +169,22 @@ CREATE TABLE public.tenants_programs (
 
 ALTER TABLE ONLY public.accounts_users
     ADD CONSTRAINT accounts_users_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_oauth_refresh_tokens auth_oauth_refresh_tokens_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.auth_oauth_refresh_tokens
+    ADD CONSTRAINT auth_oauth_refresh_tokens_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_oauth_refresh_tokens auth_oauth_refresh_tokens_short_id_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.auth_oauth_refresh_tokens
+    ADD CONSTRAINT auth_oauth_refresh_tokens_short_id_key UNIQUE (short_id);
 
 
 --
@@ -200,10 +244,24 @@ ALTER TABLE ONLY public.tenants_programs
 
 
 --
+-- Name: accounts_users_auth_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX accounts_users_auth_user_id ON public.accounts_users USING btree (auth_user_id);
+
+
+--
 -- Name: accounts_users_email; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX accounts_users_email ON public.accounts_users USING btree (email);
+
+
+--
+-- Name: auth_oauth_refresh_tokens_auth_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX auth_oauth_refresh_tokens_auth_user_id ON public.auth_oauth_refresh_tokens USING btree (auth_user_id);
 
 
 --
@@ -221,11 +279,41 @@ CREATE UNIQUE INDEX tenants_organization_memberships_uniq_membership ON public.t
 
 
 --
+-- Name: tenants_organizations_created_by_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX tenants_organizations_created_by_id ON public.tenants_organizations USING btree (created_by_id);
+
+
+--
+-- Name: tenants_programs_organization_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX tenants_programs_organization_id ON public.tenants_programs USING btree (organization_id);
+
+
+--
 -- Name: accounts_users accounts_users_auth_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.accounts_users
     ADD CONSTRAINT accounts_users_auth_user_id_fkey FOREIGN KEY (auth_user_id) REFERENCES public.auth_users(id) ON DELETE CASCADE;
+
+
+--
+-- Name: auth_oauth_refresh_tokens auth_oauth_refresh_tokens_auth_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.auth_oauth_refresh_tokens
+    ADD CONSTRAINT auth_oauth_refresh_tokens_auth_user_id_fkey FOREIGN KEY (auth_user_id) REFERENCES public.auth_users(id) ON DELETE CASCADE;
+
+
+--
+-- Name: auth_oauth_refresh_tokens auth_oauth_refresh_tokens_replaced_by_token_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.auth_oauth_refresh_tokens
+    ADD CONSTRAINT auth_oauth_refresh_tokens_replaced_by_token_id_fkey FOREIGN KEY (replaced_by_token_id) REFERENCES public.auth_oauth_refresh_tokens(id) ON DELETE CASCADE;
 
 
 --
@@ -245,11 +333,11 @@ ALTER TABLE ONLY public.tenants_organization_memberships
 
 
 --
--- Name: tenants_organizations tenants_organizations_owner_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: tenants_organizations tenants_organizations_created_by_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tenants_organizations
-    ADD CONSTRAINT tenants_organizations_owner_id_fkey FOREIGN KEY (owner_id) REFERENCES public.accounts_users(id) ON DELETE RESTRICT;
+    ADD CONSTRAINT tenants_organizations_created_by_id_fkey FOREIGN KEY (created_by_id) REFERENCES public.accounts_users(id) ON DELETE RESTRICT;
 
 
 --

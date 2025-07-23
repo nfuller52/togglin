@@ -4,5 +4,5 @@
   "dialect": "postgres",
   "envFile": ".env.local",
   "outFile": "./src/lib/db/db.d.ts",
-  "singularize": true
+  "singularize": false
 }

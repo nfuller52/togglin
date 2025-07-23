@@ -36,7 +36,7 @@ async function create(
   db: ServiceDataSource,
   orgParams: OrganizationCreateParams,
 ) {
-  const result = await UsersService.get(db, orgParams.ownerId);
+  const result = await UsersService.get(db, orgParams.createdById);
   if (!result.ok || result.error === "USER_NOT_FOUND") {
     return Service.error("USER_NOT_FOUND");
   }

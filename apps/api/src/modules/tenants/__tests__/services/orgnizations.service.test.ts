@@ -8,7 +8,7 @@ describe("OrganizationService", () => {
   describe("list", () => {
     it("returns a paginated list of organizations with total count", async () => {
       const user = await Factory.createUser(db);
-      await Factory.createOrganizations(db, 10, { ownerId: user.id });
+      await Factory.createOrganizations(db, 10, { createdById: user.id });
 
       const result = await OrganizationService.list(db, {
         page: 1,
@@ -34,7 +34,9 @@ describe("OrganizationService", () => {
   describe("get", () => {
     it("returns a single organization by id", async () => {
       const user = await Factory.createUser(db);
-      const org = await Factory.createOrganization(db, { ownerId: user.id });
+      const org = await Factory.createOrganization(db, {
+        createdById: user.id,
+      });
 
       const result = await OrganizationService.get(db, org.id);
 
@@ -55,7 +57,7 @@ describe("OrganizationService", () => {
       const user = await Factory.createUser(db);
       const orgParams = {
         name: "Test Org",
-        ownerId: user.id,
+        createdById: user.id,
       };
 
       const result = await OrganizationService.create(db, orgParams);
@@ -67,7 +69,7 @@ describe("OrganizationService", () => {
     it("returns USER_NOT_FOUND when requesting user does not exist", async () => {
       const result = await OrganizationService.create(db, {
         name: "Test Org",
-        ownerId: "invalid",
+        createdById: "invalid",
       });
 
       expect(result.ok).toBe(false);
@@ -78,7 +80,7 @@ describe("OrganizationService", () => {
       const user = await Factory.createUser(db);
       const result = await OrganizationService.create(db, {
         name: null,
-        ownerId: user.id,
+        createdById: user.id,
       } as unknown as OrganizationCreateParams); // gotta hack this to raise the error
 
       expect(result.ok).toBe(false);

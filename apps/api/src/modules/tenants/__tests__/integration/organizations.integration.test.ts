@@ -4,7 +4,7 @@ import request from "supertest";
 describe("GET /organizations", () => {
   it("returns paginated orgs", async () => {
     const user = await Factory.createUser(db);
-    await Factory.createOrganizations(db, 10, { ownerId: user.id });
+    await Factory.createOrganizations(db, 10, { createdById: user.id });
 
     const res = await request(app)
       .get("/api/v1/organizations?page=1&limit=5")
@@ -23,7 +23,7 @@ describe("POST /organizations", () => {
     const res = await request(app)
       .post("/api/v1/organizations")
       .expect("Content-Type", "application/json; charset=utf-8")
-      .send({ name: "New Organization", ownerId: user.id })
+      .send({ name: "New Organization", createdById: user.id })
       .expect(201);
 
     expect(res.body.name).toEqual("New Organization");
@@ -45,7 +45,7 @@ describe("POST /organizations", () => {
   it("returns field errors with malformed payload", async () => {
     const res = await request(app)
       .post("/api/v1/organizations")
-      .send({ ownerId: "test-owner-id" })
+      .send({ createdById: "test-owner-id" })
       .expect("Content-Type", "application/json; charset=utf-8")
       .expect(422);
 
@@ -53,7 +53,7 @@ describe("POST /organizations", () => {
       errors: [],
       fieldErrors: {
         name: { errors: ["This field is required."] },
-        ownerId: { errors: ["This field must be a valid v4 uuid."] },
+        createdById: { errors: ["This field must be a valid v4 uuid."] },
       },
       message: "Bad Request",
     });
@@ -64,7 +64,7 @@ describe("POST /organizations", () => {
       .post("/api/v1/organizations")
       .send({
         name: "Test Organization",
-        ownerId: "266489c0-25a5-4c47-851f-768bbdd8f682",
+        createdById: "266489c0-25a5-4c47-851f-768bbdd8f682",
       })
       .expect("Content-Type", "application/json; charset=utf-8")
       .expect(404);

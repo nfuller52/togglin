@@ -22,16 +22,14 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     ])
     .execute();
 
-  // await createDefaultRls(
-  //   db,
-  //   TABLE_NAME,
-  //   "organization_id",
-  //   "uuid",
-  //   RlsService.contexts.org,
-  // );
+  await db.schema
+    .createIndex(`${TABLE_NAME}_organization_id`)
+    .on(TABLE_NAME)
+    .column("organization_id")
+    .execute();
 }
 
 export async function down(db: Kysely<unknown>): Promise<void> {
-  // await removeDefaultRls(db, TABLE_NAME);
+  await db.schema.dropIndex(`${TABLE_NAME}_organization_id`).execute();
   await db.schema.dropTable(TABLE_NAME).execute();
 }

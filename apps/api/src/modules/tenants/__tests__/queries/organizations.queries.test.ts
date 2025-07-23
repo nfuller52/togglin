@@ -5,7 +5,7 @@ describe("OrganizationQueries", () => {
   describe("list", () => {
     it("returns a paginated list of organizations", async () => {
       const user = await Factory.createUser(db);
-      await Factory.createOrganizations(db, 15, { ownerId: user.id });
+      await Factory.createOrganizations(db, 15, { createdById: user.id });
 
       const results = await OrganizationQueries.list(db, {
         page: 1,
@@ -19,7 +19,7 @@ describe("OrganizationQueries", () => {
     it("respects page and offset", async () => {
       const user = await Factory.createUser(db);
       const created = await Factory.createOrganizations(db, 15, {
-        ownerId: user.id,
+        createdById: user.id,
       });
 
       const page1 = await OrganizationQueries.list(db, {
@@ -41,7 +41,7 @@ describe("OrganizationQueries", () => {
   describe("countAll", () => {
     it("returns the total number of organizations", async () => {
       const user = await Factory.createUser(db);
-      await Factory.createOrganizations(db, 7, { ownerId: user.id });
+      await Factory.createOrganizations(db, 7, { createdById: user.id });
 
       const countResult = await OrganizationQueries.countAll(db);
 
@@ -52,7 +52,9 @@ describe("OrganizationQueries", () => {
   describe("get", () => {
     it("returns a single organization by id", async () => {
       const user = await Factory.createUser(db);
-      const org = await Factory.createOrganization(db, { ownerId: user.id });
+      const org = await Factory.createOrganization(db, {
+        createdById: user.id,
+      });
 
       const result = await OrganizationQueries.get(db, org.id);
       expect(result?.id).toEqual(org.id);
