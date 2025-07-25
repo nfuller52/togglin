@@ -5,8 +5,8 @@ import {
   RegistrationCreateSchema,
   RegistrationResponseSchema,
 } from "@shared/schemas/registrations";
-import { HttpError } from "@/lib/http/errors/http-errors.js";
-import { HTTP } from "@/lib/http/status.js";
+import { HttpError } from "@/lib/http/errors/http-errors";
+import { HTTP } from "@/lib/http/status";
 import { REGISTRATIONS_ERRORS } from "../auth.errors";
 import { RegistrationsService } from "../services/registrations.service";
 

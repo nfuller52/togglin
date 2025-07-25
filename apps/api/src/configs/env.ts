@@ -6,6 +6,13 @@ export type ApplicationEnvironment = z.infer<typeof EnvSchema>["NODE_ENV"];
 const EnvSchema = z.object({
   // Application
   NODE_ENV: z.enum(["local", "test", "production"]),
+  HOST_URL: z.url(),
+
+  // Auth
+  ACCESS_TOKEN_EXPIRATION_IN_SECONDS: z.coerce.number(),
+  ACCESS_TOKEN_SECRET: z.string(),
+  REFRESH_TOKEN_EXPIRATION_IN_SECONDS: z.coerce.number(),
+  MAX_USER_SESSIONS: z.coerce.number(),
 
   // Server
   LOG_LEVEL: z.string().default("info"),
